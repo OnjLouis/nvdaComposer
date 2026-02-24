@@ -1,0 +1,38 @@
+NVDA_COMPOSER_TXT v5
+tempo 120
+ppq 480
+step 480
+base 60
+transpose 0
+keyPc 0
+keyName C
+chromatic 0
+scale 0
+qwerty 0
+events
+note 64 480
+note 62 480
+note 60 480
+note 62 480
+note 64 480
+note 64 480
+note 64 960
+note 62 480
+note 62 480
+note 62 960
+note 64 480
+note 67 480
+note 67 960
+rest 480
+note 64 480
+note 62 480
+note 60 480
+note 62 480
+note 64 480
+note 64 480
+note 64 480
+note 62 480
+note 62 480
+note 64 480
+note 62 480
+note 60 960

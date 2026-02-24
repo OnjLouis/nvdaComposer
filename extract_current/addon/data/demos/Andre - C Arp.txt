@@ -1,0 +1,60 @@
+NVDA_COMPOSER_TXT v6
+tempo 120
+ppq 480
+step 480
+base 60
+transpose 0
+keyPc 0
+keyName C
+chromatic 0
+scale 0
+qwerty 0
+title Andre Louis - C Arp
+notes
+Early experiments with the composer when it was just a baby and I was testing it for consistency.
+endNotes
+events
+note 72 85 20
+rest 35
+note 76 120 30
+note 79 120 40
+note 76 95 50
+rest 25
+note 84 120 60
+note 79 120 70
+note 76 120 80
+note 72 58 90
+rest 62
+note 69 120 100
+note 72 120 110
+note 76 110 120
+rest 10
+note 72 102 127
+rest 18
+note 81 120 127
+note 76 120 120
+note 72 120 110
+note 69 58 100
+rest 62
+note 65 120 90
+note 69 120 80
+note 72 120 70
+note 69 110 60
+rest 10
+note 77 120 50
+note 72 120 40
+note 69 120 30
+note 65 52 30
+rest 68
+note 67 120 20
+note 71 100 10
+rest 20
+note 74 120 30
+note 71 120 50
+note 79 120 70
+note 77 120 90
+note 76 112 110
+rest 8
+note 74 115 120
+rest 5
+note 72 415 127

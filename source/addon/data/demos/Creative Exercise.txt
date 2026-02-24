@@ -1,0 +1,258 @@
+NVDA_COMPOSER_TXT v6
+tempo 280
+ppq 480
+step 480
+base 60
+transpose 0
+keyPc 0
+keyName C
+chromatic 0
+scale 0
+qwerty 0
+title Creative Exercise
+events
+note 70 480 127
+rest 480
+note 72 480 127
+rest 480
+note 73 480 127
+rest 480
+note 77 480 127
+rest 480
+note 75 240 127
+rest 240
+note 77 240 127
+rest 240
+note 75 240 127
+rest 240
+note 72 240 127
+rest 2160
+note 73 240 127
+rest 240
+note 75 240 127
+rest 240
+note 73 240 127
+rest 240
+note 70 240 127
+rest 2160
+note 72 240 127
+rest 240
+note 73 240 127
+rest 240
+note 72 240 127
+rest 240
+note 68 240 127
+rest 2160
+note 70 480 127
+rest 480
+note 72 480 127
+rest 480
+note 73 480 127
+rest 480
+note 77 480 127
+rest 480
+note 75 240 127
+rest 240
+note 77 240 127
+rest 240
+note 75 240 127
+rest 240
+note 72 240 127
+rest 2160
+note 73 240 127
+rest 240
+note 75 240 127
+rest 240
+note 73 240 127
+rest 240
+note 70 240 127
+rest 2160
+note 72 240 127
+rest 240
+note 73 240 127
+rest 240
+note 72 240 127
+rest 240
+note 68 240 127
+rest 2160
+note 80 480 127
+rest 480
+note 78 480 127
+rest 480
+note 82 480 127
+rest 480
+note 78 480 127
+rest 480
+note 76 480 127
+rest 480
+note 77 240 127
+rest 240
+note 80 960 127
+rest 480
+rest 480
+rest 480
+note 74 480 127
+rest 480
+note 75 240 127
+rest 240
+note 78 960 127
+rest 480
+note 77 480 127
+rest 480
+note 72 480 127
+rest 480
+note 73 240 127
+rest 240
+note 77 960 127
+rest 480
+rest 480
+rest 480
+note 77 240 127
+rest 240
+note 75 240 127
+rest 240
+note 74 240 127
+rest 240
+note 75 240 127
+rest 240
+note 80 480 127
+rest 480
+note 77 480 127
+rest 480
+note 75 960 127
+note 73 480 127
+rest 480
+note 72 240 127
+rest 240
+note 73 240 127
+rest 240
+note 77 240 127
+rest 240
+note 80 240 127
+rest 240
+note 84 480 127
+rest 480
+note 82 480 127
+note 81 480 127
+rest 480
+note 82 240 127
+rest 240
+note 87 240 127
+rest 240
+note 84 240 127
+rest 240
+note 80 1920 127
+rest 480
+rest 480
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 240
+note 77 240 127
+rest 240
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 240
+note 77 240 127
+rest 240
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 68 240 127
+rest 240
+note 69 240 127
+rest 240
+note 70 240 127
+rest 720
+note 80 480 127
+note 81 480 127
+note 82 240 127
+rest 240
+note 85 240 127
+rest 240
+note 82 240 127
+rest 240
+note 76 480 127
+note 77 240 127
+rest 240
+note 80 240 127
+rest 240
+note 77 240 127
+rest 240
+note 73 1920 127
+rest 480
+rest 480
+rest 480
+note 80 480 127
+note 81 480 127
+note 82 240 127
+rest 240
+note 85 240 127
+rest 240
+note 82 240 127
+rest 240
+note 76 480 127
+note 77 240 127
+rest 240
+note 80 240 127
+rest 240
+note 77 240 127
+rest 240
+note 73 1920 127
+rest 1920

@@ -1,0 +1,48 @@
+NVDA_COMPOSER_TXT v5
+tempo 120
+ppq 480
+step 480
+base 60
+transpose 12
+keyPc 0
+keyName C
+chromatic 1
+scale 0
+qwerty 1
+title Andre Louis - Transposition Demo 2
+notes
+Taking a passage of fast notes, pasting it along the time line and transposing the phrase three times.
+endNotes
+events
+note 73 30
+note 76 30
+note 83 30
+note 76 30
+note 85 30
+note 83 30
+note 76 30
+note 83 30
+note 74 30
+note 77 30
+note 84 30
+note 77 30
+note 86 30
+note 84 30
+note 77 30
+note 84 30
+note 75 30
+note 78 30
+note 85 30
+note 78 30
+note 87 30
+note 85 30
+note 78 30
+note 85 30
+note 76 30
+note 79 30
+note 86 30
+note 79 30
+note 88 30
+note 86 30
+note 79 30
+note 86 30

@@ -1,0 +1,1 @@
+the demos in this folder were auto-transcribed by Chat GPT and are left intentionally bad for you to practice fixing them.
