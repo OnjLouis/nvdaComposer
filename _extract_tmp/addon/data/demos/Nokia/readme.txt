@@ -1,1 +1,0 @@
-The ringtones in this foldre were taken from old Nokia phones and are here purely for educational purposes. Copyright their respective owners.

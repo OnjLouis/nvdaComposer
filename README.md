@@ -8,10 +8,62 @@
 
 ## Keyboard Shortcuts
 
-- Shortcuts could not be auto-extracted; see `source/doc/en/readme.html`.
-
-
+- Ctrl
+- P
+- `
+- F2
+- Shift
+- C
+- V
+- S
+- F12
+- O
+- E
+- M
+- -
+- =
+- G
+- Backspace
+- F1
+- F
+- NVDA
+- Alt
+- N
+- 1
+- 6
+- 0
+- Â¬
+- Left
+- Right
+- Space
+- Up
+- Down
+- K
+- J
+- L
+- U
+- I
+- 7
+- 8
+- 9
+- A
+- W
+- D
+- T
+- Y
+- H
+- Enter
+- Esc
+- Home
+- End
+- Delete
+- Z
+- Page Up
+- Page Down
+- ,
+- .
 ## Source Code
 
 - Full extracted addon source for this build is in source/.
+
 
