@@ -2798,10 +2798,8 @@ class ComposerDialog(wx.Dialog):
                     continue
             finally:
                 dlg.Destroy()
-
-    def _prompt_velocity(self, title: str, initial: str = "") -> Optional[int]:
-        """Prompt for a velocity value (1..127)."""
-        prompt = "Enter velocity (1 to 127)."
+    def _prompt_int_range(self, title: str, prompt: str, initial: str, vmin: int, vmax: int, error_msg: str) -> Optional[int]:
+        """Prompt for an integer in a range (inclusive)."""
         current_initial = str(initial or "")
         while True:
             dlg = wx.Dialog(self, title=title)
@@ -2830,15 +2828,39 @@ class ComposerDialog(wx.Dialog):
                 raw = (tc.GetValue() or "").strip()
                 try:
                     v = int(raw)
-                    if v < 1 or v > 127:
+                    if v < int(vmin) or v > int(vmax):
                         raise ValueError()
                     return v
                 except Exception:
-                    ui.message("Velocity must be a number from 1 to 127.")
+                    ui.message(error_msg)
                     current_initial = raw or current_initial
                     continue
             finally:
                 dlg.Destroy()
+
+    def _prompt_velocity(self, title: str, initial: str = "") -> Optional[int]:
+        """Prompt for a velocity value (1..127)."""
+        return self._prompt_int_range(
+            title=title,
+            prompt="Enter velocity (1 to 127).",
+            initial=initial,
+            vmin=1,
+            vmax=127,
+            error_msg="Velocity must be a number from 1 to 127.",
+        )
+
+    def _prompt_tempo(self, title: str, initial: str = "") -> Optional[int]:
+        """Prompt for a tempo value in BPM."""
+        return self._prompt_int_range(
+            title=title,
+            prompt="Enter tempo in BPM (20 to 999).",
+            initial=initial,
+            vmin=20,
+            vmax=999,
+            error_msg="Tempo must be a number from 20 to 999.",
+        )
+
+
 
     def _set_velocity_from_prompt(self) -> None:
         """Press V to set velocity: applies to selection if present, otherwise sets input velocity."""
@@ -2891,6 +2913,13 @@ class ComposerDialog(wx.Dialog):
                         self._preview_pitch(int(ev.pitch), int(ev.dur), vel=int(v))
             except Exception:
                 pass
+    def _set_tempo_from_prompt(self) -> None:
+        bpm = self._prompt_tempo("Tempo", initial=str(int(getattr(self.comp, "tempo_bpm", 120) or 120)))
+        if bpm is None:
+            return
+        self._set_tempo(int(bpm), announce=True)
+
+
 
     def _set_custom_step_from_prompt(self) -> None:
         ticks = self._prompt_custom_ticks("Custom step length", initial=str(int(getattr(self.comp, "step_ticks", 0) or 0)))
@@ -4415,6 +4444,10 @@ Esc closes this quick start tutorial window.'''
                 return
             if key in (ord("S"), ord("s")):
                 self._do_save()
+                return
+
+            if (mods & wx.MOD_SHIFT) == 0 and key in (ord("P"), ord("p")):
+                self._set_tempo_from_prompt()
                 return
             if key in (ord("C"), ord("c")):
                 self._copy_selection()
