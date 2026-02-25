@@ -1482,7 +1482,7 @@ def _parse_rng_temporary_song(br: _BitReader) -> Tuple[List[Event], int, List[Tu
         cur_tick += ticks
 
     def apply_instruction_stream(instrs: List[Tuple[str, Any]], repeat_index: int = 0) -> None:
-        nonlocal current_scale, c_midi, tempo_bpm, tempo_map, cur_tick
+        nonlocal current_scale, c_midi, tempo_bpm, tempo_map, cur_tick, current_volume
         for kind, payload in instrs:
             if kind == "scale":
                 current_scale = payload
@@ -2344,6 +2344,10 @@ class ComposerDialog(wx.Dialog):
         self.comp.scale_index = 0
         self.comp.qwerty_layout = False
 
+        self.comp.title = ""
+        self.comp.notes = ""
+        self.comp.markers = []
+
         self.comp.dirty = False
         self._lastPath = None
         self._lastMidiPath = None
@@ -2385,6 +2389,10 @@ class ComposerDialog(wx.Dialog):
         except Exception as e:
             ui.message(f"Import .rng failed: {e}")
             return
+        # Clear undo/redo; treat this as a new loaded project.
+        self._undoStack.clear()
+        self._redoStack.clear()
+
 
         # Replace current composition with imported data
         self.comp.events = comp.events
@@ -2397,6 +2405,9 @@ class ComposerDialog(wx.Dialog):
         self.comp.chromatic_mode = comp.chromatic_mode
         self.comp.scale_index = comp.scale_index
         self.comp.qwerty_layout = comp.qwerty_layout
+        self.comp.title = str(title or "")
+        self.comp.notes = ""
+        self.comp.markers = []
 
         self.comp.dirty = False
         self._lastPath = None

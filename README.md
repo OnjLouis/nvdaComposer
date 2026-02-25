@@ -6,3 +6,12 @@
 2. In NVDA, open the Add-on Manager and choose Install.
 3. Select the `.nvda-addon` file and restart NVDA when prompted.
 
+## Keyboard Shortcuts
+
+- Shortcuts could not be auto-extracted; see `source/doc/en/readme.html`.
+
+
+## Source Code
+
+- Full extracted addon source for this build is in source/.
+

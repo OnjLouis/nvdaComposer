@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>NVDA Composer 1.3 - Help</title>
+<title>NVDA Composer 1.4 - Help</title>
 <style>
   body { font-family: sans-serif; line-height: 1.4; max-width: 72rem; margin: 1rem; }
   code, kbd { font-family: monospace; }
@@ -20,7 +20,7 @@
 </style>
 </head>
 <body>
-<h1 id="top">NVDA Composer 1.3</h1>
+<h1 id="top">NVDA Composer 1.4</h1>
 <p>
 NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad inside NVDA.
 You enter notes (or rests) on a timeline, select and edit them, and play back your project.
@@ -32,7 +32,7 @@ and exported as MIDI, WAV, or Nokia <code>.rng</code>.
   <a href="https://onj.me/nvda">https://onj.me/nvda</a>
 </div>
 <div class="whatsnew" id="whats-new">
-<h2 id="changelog">Changelog</h2><h3 id="version-1-3">Version 1.3</h3><ul><li>New: Velocity / volume support (adjust with comma/period, Shift+comma/period for larger steps, and press V to type a velocity directly).</li><li>Improved: Share clips now start with #NVDAComposer, use a more compact format, and clipboard import is more forgiving if extra text is copied above/below the clip.</li></ul><h3 id="version-1-2">Version 1.2</h3>
+<h2 id="changelog">Changelog</h2><h3 id="version-1-4">Version 1.4</h3><ul><li>New: <kbd>Ctrl</kbd>+<kbd>P</kbd> lets you type an exact tempo in BPM.</li><li>Improved: Nokia <code>.rng</code> import/export now uses a consistent volume↔velocity scaling.</li></ul><h3 id="version-1-3">Version 1.3</h3><ul><li>New: Velocity / volume support (adjust with comma/period, Shift+comma/period for larger steps, and press V to type a velocity directly).</li><li>Improved: Share clips now start with #NVDAComposer, use a more compact format, and clipboard import is more forgiving if extra text is copied above/below the clip.</li></ul><h3 id="version-1-2">Version 1.2</h3>
 <ul>
 <li><strong>Custom durations and step length:</strong> press <kbd>`</kbd> to enter an exact custom step (for new notes/rests), or <kbd>Ctrl</kbd>+<kbd>`</kbd> to set an exact duration for the current note or selection.</li>
 <li><strong>Track properties:</strong> <kbd>F2</kbd> lets you set an optional project title and notes/comments (saved with the project).</li>
@@ -222,6 +222,7 @@ In Scale mode, they are scale degrees (0 = root).
 <h3 id="tempo">Tempo</h3>
 <table>
 <tr><th>Key</th><th>Action</th></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td>Type an exact tempo in BPM.</td></tr>
 <tr><td><kbd>Page Up</kbd></td><td>Increase tempo by 1 BPM.</td></tr>
 <tr><td><kbd>Shift</kbd>+<kbd>Page Up</kbd></td><td>Increase tempo by 10 BPM.</td></tr>
 <tr><td><kbd>Page Down</kbd></td><td>Decrease tempo by 1 BPM.</td></tr>
