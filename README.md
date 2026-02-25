@@ -1,17 +1,40 @@
-﻿the demos in this folder were auto-transcribed by Chat GPT and are left intentionally bad for you to practice fixing them.
+﻿# NVDA Composer
 
-## Install
+NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad for NVDA.
 
-1. Download the `.nvda-addon` file from the Releases page.
-2. In NVDA, open the Add-on Manager and choose Install.
-3. Select the `.nvda-addon` file and restart NVDA when prompted.
+## Quick Start
 
-## Keyboard Shortcuts
+1. Open Composer with `NVDA+Alt+N`.
+2. Choose a step length with `1` to `6`.
+3. Enter notes, use `Space` for a rest.
+4. Press `Enter` to play/pause.
+5. Save with `Ctrl+S`.
 
-- See source/doc/en/readme.html for shortcut details.
+## Common Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `NVDA+Alt+N` | Open NVDA Composer |
+| `F1` | Open full help |
+| `Shift+F1` | Open quick tutorial |
+| `Ctrl+O` | Open project / import |
+| `Ctrl+S` | Save project |
+| `Ctrl+Shift+S` or `F12` | Save As |
+| `Enter` | Play / pause |
+| `Esc` | Stop playback |
+| `Left` / `Right` | Move timeline cursor |
+| `Shift+Left` / `Shift+Right` | Expand or shrink selection |
+| `Space` | Insert rest |
+| `Delete` / `Backspace` | Delete note(s) |
+| `Ctrl+Z` / `Ctrl+Y` | Undo / Redo |
+| `Ctrl+Up` / `Ctrl+Down` | Increase / decrease tempo |
+| `Ctrl+P` | Set exact tempo (BPM) |
+
+## Full Documentation
+
+- Full shortcut reference and feature docs: [`source/doc/en/readme.html`](source/doc/en/readme.html)
+
 ## Source Code
 
-- Full extracted addon source for this build is in source/.
-
-
-
+- The source for this build is published in [`source/`](source/).
+- Main plugin file: [`source/globalPlugins/nvdaComposer.py`](source/globalPlugins/nvdaComposer.py)
