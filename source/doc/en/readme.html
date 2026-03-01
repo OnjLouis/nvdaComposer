@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>NVDA Composer 1.4 - Help</title>
+<title>NVDA Composer 1.5 - Help</title>
 <style>
   body { font-family: sans-serif; line-height: 1.4; max-width: 72rem; margin: 1rem; }
   code, kbd { font-family: monospace; }
@@ -20,7 +20,7 @@
 </style>
 </head>
 <body>
-<h1 id="top">NVDA Composer 1.4</h1>
+<h1 id="top">NVDA Composer 1.5</h1>
 <p>
 NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad inside NVDA.
 You enter notes (or rests) on a timeline, select and edit them, and play back your project.
@@ -32,7 +32,17 @@ and exported as MIDI, WAV, or Nokia <code>.rng</code>.
   <a href="https://onj.me/nvda">https://onj.me/nvda</a>
 </div>
 <div class="whatsnew" id="whats-new">
-<h2 id="changelog">Changelog</h2><h3 id="version-1-4">Version 1.4</h3><ul><li>New: <kbd>Ctrl</kbd>+<kbd>P</kbd> lets you type an exact tempo in BPM.</li><li>Improved: Nokia <code>.rng</code> import/export now uses a consistent volume↔velocity scaling.</li></ul><h3 id="version-1-3">Version 1.3</h3><ul><li>New: Velocity / volume support (adjust with comma/period, Shift+comma/period for larger steps, and press V to type a velocity directly).</li><li>Improved: Share clips now start with #NVDAComposer, use a more compact format, and clipboard import is more forgiving if extra text is copied above/below the clip.</li></ul><h3 id="version-1-2">Version 1.2</h3>
+<h2 id="changelog">Changelog</h2>
+<h3>Version 1.5</h3>
+<ul>
+<li>Key logic refactor for dotted and triplet durations.</li>
+<li>9 now toggles triplet step length.</li>
+<li>0 toggles dotted step length.</li>
+<li>Ctrl+9 toggles triplet duration for selected note(s).</li>
+<li>Ctrl+0 toggles dotted duration for selected note(s).</li>
+<li>Improved duration feedback, preview, and selection restore consistency.</li>
+</ul>
+<h3 id="version-1-4">Version 1.4</h3><ul><li>New: <kbd>Ctrl</kbd>+<kbd>P</kbd> lets you type an exact tempo in BPM.</li><li>Improved: Nokia <code>.rng</code> import/export now uses a consistent volume↔velocity scaling.</li></ul><h3 id="version-1-3">Version 1.3</h3><ul><li>New: Velocity / volume support (adjust with comma/period, Shift+comma/period for larger steps, and press V to type a velocity directly).</li><li>Improved: Share clips now start with #NVDAComposer, use a more compact format, and clipboard import is more forgiving if extra text is copied above/below the clip.</li></ul><h3 id="version-1-2">Version 1.2</h3>
 <ul>
 <li><strong>Custom durations and step length:</strong> press <kbd>`</kbd> to enter an exact custom step (for new notes/rests), or <kbd>Ctrl</kbd>+<kbd>`</kbd> to set an exact duration for the current note or selection.</li>
 <li><strong>Track properties:</strong> <kbd>F2</kbd> lets you set an optional project title and notes/comments (saved with the project).</li>
@@ -110,7 +120,7 @@ choose a step length → move the cursor → enter notes/rests → play back.
 <li><kbd>1</kbd>–<kbd>6</kbd>: set step length (whole, half, quarter, eighth, sixteenth, thirty-second).</li>
 <li><kbd>0</kbd>: toggle dotted / undotted step.</li>
 <li><kbd>`</kbd> (grave; on some keyboards this is <kbd>¬</kbd>): type a custom step length.</li>
-</ul>
+<li>9 toggles triplet step length.</li><li>Ctrl+9 toggles triplet duration for selected note(s).</li></ul>
 <h3 id="note-entry-input">Input pitch and inserting</h3>
 <ul>
 <li><kbd>Left</kbd> / <kbd>Right</kbd>: move the timeline cursor by one step.</li>
@@ -124,7 +134,7 @@ choose a step length → move the cursor → enter notes/rests → play back.
 <kbd>Ctrl</kbd>+<kbd>K</kbd> switches the note-entry keyboard:
 </p>
 <ul>
-<li><strong>Grid layout</strong> (default): a compact 3×3 “pad” on <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> / <kbd>U</kbd> <kbd>I</kbd> <kbd>O</kbd> / <kbd>7</kbd> <kbd>8</kbd> <kbd>9</kbd>.</li>
+<li><strong>Grid layout</strong> (default): a compact “pad” on <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> / <kbd>U</kbd> <kbd>I</kbd> <kbd>O</kbd> / <kbd>7</kbd> <kbd>8</kbd>.</li>
 <li><strong>QWERTY layout</strong>: a longer “piano-ish” row on <kbd>A</kbd> <kbd>W</kbd> <kbd>S</kbd> <kbd>E</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>T</kbd> <kbd>G</kbd> <kbd>Y</kbd> <kbd>H</kbd> <kbd>U</kbd> <kbd>J</kbd> <kbd>K</kbd>.</li>
 </ul>
 <p>
@@ -144,7 +154,7 @@ In Scale mode, they are scale degrees (0 = root).
 <tr><th>Layout</th><th>Keys that insert notes</th><th>Chromatic</th><th>Scale</th></tr>
 <tr>
 <td>Grid</td>
-<td><kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> <kbd>U</kbd> <kbd>I</kbd> <kbd>O</kbd> <kbd>7</kbd> <kbd>8</kbd> <kbd>9</kbd></td>
+<td>J K L U I O 7 8</td>
 <td>Offsets 0–8</td>
 <td>Degrees 0–8</td>
 </tr>
@@ -240,7 +250,7 @@ In Scale mode, they are scale degrees (0 = root).
 <tr><td><kbd>Ctrl</kbd>+<kbd>Left</kbd></td><td>Shorten selected note(s) by one step.</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>Right</kbd></td><td>Lengthen selected note(s) by one step.</td></tr>
 <tr><td><kbd>Ctrl</kbd>+<kbd>1</kbd> … <kbd>Ctrl</kbd>+<kbd>6</kbd></td><td>Set selected note(s) duration to Whole/Half/Quarter/Eighth/Sixteenth/Thirty-second.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td><td>Toggle dotted duration for the selected note(s).</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td><td>Toggle dotted duration for the selected note(s).</td></tr><tr><td><kbd>Ctrl</kbd>+<kbd>9</kbd></td><td>Toggle triplet duration for the selected note(s).</td></tr>
 </table>
 <h3 id="velocity">Velocity / volume</h3>
 <table>
@@ -254,7 +264,7 @@ In Scale mode, they are scale degrees (0 = root).
 <table>
 <tr><th>Key</th><th>Action</th></tr>
 <tr><td><kbd>1</kbd> … <kbd>6</kbd></td><td>Set step for new notes/rests to Whole/Half/Quarter/Eighth/Sixteenth/Thirty-second.</td></tr>
-<tr><td><kbd>0</kbd></td><td>Toggle dotted step (affects new notes/rests).</td></tr>
+<tr><td><kbd>0</kbd></td><td>Toggle dotted step (affects new notes/rests).</td></tr><tr><td><kbd>9</kbd></td><td>Toggle triplet step (affects new notes/rests).</td></tr>
 </table>
 <h3 id="custom">Custom duration input</h3>
 <table>

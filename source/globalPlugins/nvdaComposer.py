@@ -945,7 +945,7 @@ class PreviewBeep:
 # Input mapping / scales
 # =========================
 
-GRID_OFFSETS = {"j": 0, "k": 1, "l": 2, "u": 3, "i": 4, "o": 5, "7": 6, "8": 7, "9": 8}
+GRID_OFFSETS = {"j": 0, "k": 1, "l": 2, "u": 3, "i": 4, "o": 5, "7": 6, "8": 7}
 GRID_DEGREES = GRID_OFFSETS.copy()
 
 QWERTY_OFFSETS = {"a": 0, "w": 1, "s": 2, "e": 3, "d": 4, "f": 5, "t": 6, "g": 7, "y": 8, "h": 9, "u": 10, "j": 11, "k": 12}
@@ -1929,6 +1929,10 @@ class ComposerDialog(wx.Dialog):
         super().__init__(parent, title="NVDA Composer", style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
 
         self.comp = comp
+        # Step modifier state (kept separate from Composition so it does not affect file formats)
+        self._step_mode = "normal"  # "normal", "dotted", or "triplet"
+        self._step_base_ticks = int(getattr(self.comp, "step_ticks", 1) or 1)
+
         self.addon_dir = addon_dir
         self.scales = load_scales(addon_dir)
 
@@ -2680,27 +2684,109 @@ class ComposerDialog(wx.Dialog):
             ui.message(f"Changed length of {changed}")
 
 
-    def _toggle_dotted_ticks(self, ticks: int) -> int:
+    def _common_duration_bases(self, extra: tuple[int, ...] = ()) -> set[int]:
+        """Return a set of 'musical' base durations (in ticks) used for dotted/triplet detection.
+
+        This avoids mis-detecting plain quarter notes (e.g. 480) as 'undotting' to triplet values (e.g. 320).
+        """
+        ppq = int(getattr(self.comp, "ppq", 480) or 480)
+        bases = {
+            max(1, ppq * 4),          # whole
+            max(1, ppq * 2),          # half
+            max(1, ppq),              # quarter
+            max(1, ppq // 2),         # eighth
+            max(1, ppq // 4),         # sixteenth
+            max(1, ppq // 8),         # thirty-second
+        }
+        for b in extra:
+            try:
+                b = int(b)
+            except Exception:
+                continue
+            if b > 0:
+                bases.add(b)
+        return bases
+
+    def _toggle_dotted_ticks(self, ticks: int, base_hint: int | None = None) -> int:
         """Toggle dotted/undotted for a tick value.
 
-        If ticks looks like a dotted value (exactly undotted*3/2), convert to undotted.
-        Otherwise convert to dotted.
+        Undotting only happens if the current duration is a dotted form of a 'reasonable' base duration.
+        Otherwise we treat the value as undotted and apply dotting (× 3/2).
         """
         ticks = int(max(1, ticks))
+        bases = self._common_duration_bases(extra=(() if base_hint is None else (int(base_hint),)))
         # Dotted values satisfy: ticks = base * 3/2  => base = ticks * 2/3
         if (ticks * 2) % 3 == 0:
             base = (ticks * 2) // 3
-            return int(max(1, base))
-        # Otherwise make dotted (3/2)
-        return int(max(1, (ticks * 3) // 2))
+            if base in bases:
+                return int(max(1, base))
+        # Otherwise make dotted (3/2), rounded to nearest tick
+        return int(max(1, (ticks * 3 + 1) // 2))
+
+    def _toggle_triplet_ticks(self, ticks: int, base_hint: int | None = None) -> int:
+        """Toggle triplet/normal for a tick value.
+
+        Normalizing back only happens if the current duration is a triplet form of a 'reasonable' base duration.
+        Otherwise we treat the value as normal and apply triplet scaling (× 2/3).
+        """
+        ticks = int(max(1, ticks))
+        bases = self._common_duration_bases(extra=(() if base_hint is None else (int(base_hint),)))
+        # Triplet values satisfy: ticks = base * 2/3  => base = ticks * 3/2
+        if (ticks * 3) % 2 == 0:
+            base = (ticks * 3) // 2
+            if base in bases:
+                return int(max(1, base))
+        # Otherwise make triplet (2/3), rounded to nearest tick
+        return int(max(1, (ticks * 2 + 1) // 3))
 
     def _toggle_step_dotted(self) -> None:
+        """Toggle dotted step for new notes/rests (mutually exclusive with triplet)."""
         self._push_undo()
-        before = int(self.comp.step_ticks)
-        after = self._toggle_dotted_ticks(before)
-        self.comp.step_ticks = after
+        mode = getattr(self, "_step_mode", "normal") or "normal"
+        base = int(getattr(self, "_step_base_ticks", int(self.comp.step_ticks) or 1) or 1)
+
+        if mode == "dotted":
+            # Back to normal
+            self.comp.step_ticks = int(max(1, base))
+            self._step_mode = "normal"
+        else:
+            # If we were in triplet mode, keep the same base and switch modifiers.
+            if mode == "normal":
+                base = int(self.comp.step_ticks) or 1
+                self._step_base_ticks = int(max(1, base))
+            self.comp.step_ticks = int(max(1, (base * 3 + 1) // 2))
+            self._step_mode = "dotted"
+
         self._mark_dirty()
-        self._update_status(f"Step {dur_label(self.comp.step_ticks, self.comp.ppq)}")
+        label = dur_label(self.comp.step_ticks, self.comp.ppq)
+        if self._step_mode == "dotted":
+            self._update_status(f"Step dotted {label}")
+        else:
+            self._update_status(f"Step {label}")
+        return
+
+    def _toggle_step_triplet(self) -> None:
+        """Toggle triplet step for new notes/rests (mutually exclusive with dotted)."""
+        self._push_undo()
+        mode = getattr(self, "_step_mode", "normal") or "normal"
+        base = int(getattr(self, "_step_base_ticks", int(self.comp.step_ticks) or 1) or 1)
+
+        if mode == "triplet":
+            self.comp.step_ticks = int(max(1, base))
+            self._step_mode = "normal"
+        else:
+            if mode == "normal":
+                base = int(self.comp.step_ticks) or 1
+                self._step_base_ticks = int(max(1, base))
+            self.comp.step_ticks = int(max(1, (base * 2 + 1) // 3))
+            self._step_mode = "triplet"
+
+        self._mark_dirty()
+        label = dur_label(self.comp.step_ticks, self.comp.ppq)
+        if self._step_mode == "triplet":
+            self._update_status(f"Step triplet {label}")
+        else:
+            self._update_status(f"Step {label}")
         return
 
     def _parse_custom_ticks_input(self, s: str) -> int:
@@ -3088,6 +3174,66 @@ class ComposerDialog(wx.Dialog):
         self.refreshList(setFocus=True)
         ui.message(f"Deleted {deleted_label}")
 
+    def _toggle_triplet_duration_selected(self) -> None:
+        """Toggle triplet/normal for selected events (or current event).
+
+        Mirrors Ctrl+0 dotted toggle behavior: updates durations, restores selection consistently,
+        announces the new duration, and previews pitch when possible.
+        """
+        self._push_undo()
+
+        sel_disp = self._selected_display_indices()
+        sels = self._selected_event_indices()
+        if not sels:
+            ei = self.comp.disp_to_event_index(self.comp.cursor)
+            if ei is None:
+                ui.message("Nothing selected")
+                return
+            sels = [ei]
+            sel_disp = [self.comp.cursor]
+
+        multi = len(sels) > 1
+        last_pitch = None
+        last_dur = None
+
+        for i in sels:
+            if 0 <= i < len(self.comp.events):
+                ev = self.comp.events[i]
+                ev.dur = self._toggle_triplet_ticks(ev.dur)
+                if not multi and ev.kind == "note" and ev.pitch is not None:
+                    last_pitch = int(ev.pitch)
+                last_dur = int(ev.dur)
+
+        self._mark_dirty()
+
+        # Restore selection exactly like other duration operations so the list readout stays in sync.
+        try:
+            self._deselectAll()
+            max_di = self.comp.display_len() - 1
+            for di in sorted(set(clamp(int(x), 0, max_di) for x in sel_disp)):
+                try:
+                    self.list.SetSelection(di, True)
+                except TypeError:
+                    try:
+                        self.list.SetSelection(di)
+                    except Exception:
+                        pass
+                except Exception:
+                    pass
+        except Exception:
+            # Fallback: best-effort restore
+            try:
+                self._restore_selection(sel_disp)
+            except Exception:
+                pass
+
+        if not multi and sels and 0 <= sels[0] < len(self.comp.events):
+            ui.message(dur_label(self.comp.events[sels[0]].dur, self.comp.ppq))
+            if last_pitch is not None:
+                self._preview_pitch(last_pitch, last_dur or self.comp.step_ticks)
+        else:
+            ui.message("Toggled triplet length")
+        return
     def _confirm_unsaved(self) -> int:
         if not self.comp.dirty:
             return wx.ID_NO
@@ -3380,6 +3526,9 @@ class ComposerDialog(wx.Dialog):
     def _set_step_ticks(self, ticks: int, announce: bool = True) -> None:
         ticks = max(1, int(ticks))
         self.comp.step_ticks = ticks
+        # Reset modifier state when an explicit step is set.
+        self._step_mode = "normal"
+        self._step_base_ticks = int(ticks)
         self._mark_dirty()
         if announce:
             ui.message(f"Step {dur_label(self.comp.step_ticks, self.comp.ppq)}")
@@ -3979,7 +4128,14 @@ Open:
 Step length (new notes and rests):
 • 1–6 set the step length (whole → 32nd).
 • 0 toggles dotted/undotted.
+• Ctrl+9 toggles triplet step (new notes/rests).
 • ` (grave; often ¬) lets you type a custom step length.
+
+Editing durations (current note/selection):
+• Ctrl+Left/Right shortens/lengthens by one step.
+• Ctrl+1–6 sets duration to whole/half/quarter/eighth/16th/32nd.
+• Ctrl+0 toggles dotted duration.
+• Ctrl+9 toggles triplet duration.
 
 Entering notes:
 • Left/Right moves the timeline cursor by one step.
@@ -3989,10 +4145,10 @@ Entering notes:
 
 Which keys enter notes?
 • Ctrl+K chooses the layout:
-  – Grid layout: J K L U I O 7 8 9 (low → high)
+  – Grid layout: J K L U I O 7 8 (low → high)
   – QWERTY layout: A W S E D F T G Y H U J K (low → high)
 • In Scale mode (Ctrl+T), the keys act as scale degrees:
-  – Grid: J=1, K=2, L=3, U=4, I=5, O=6, 7=7, 8=8, 9=9
+  – Grid: J=1, K=2, L=3, U=4, I=5, O=6, 7=7, 8=8
   – QWERTY: A=1, S=2, D=3, F=4, G=5, H=6, J=7, K=8
 
 Layouts and scales:
@@ -4536,14 +4692,38 @@ Esc closes this quick start tutorial window.'''
             self._change_length_selected(+1)
             return
 
-        # ---- Set selected duration by division (Ctrl+1..6) and toggle dotted (Ctrl+0) ----
+        # ---- Set selected duration by division (Ctrl+1..6), dotted (Ctrl+0), and triplet (Ctrl+9) ----
         if (mods & wx.MOD_CONTROL) and not (mods & wx.MOD_ALT):
             uni = evt.GetUnicodeKey()
-            if uni == ord("0"):
+            # Some keyboard layouts/hosts do not provide a UnicodeKey for Ctrl+digits.
+            # Fall back to keycode for ASCII digits and numpad digits.
+            digit_key = None
+            if uni is not None and uni != wx.WXK_NONE and 48 <= int(uni) <= 57:
+                digit_key = int(uni)
+            elif ord("0") <= int(key) <= ord("9"):
+                digit_key = int(key)
+            else:
+                # Numpad digits (works whether NumLock is on or off, provided wx reports numpad keycodes)
+                for n in range(10):
+                    kc = getattr(wx, f"WXK_NUMPAD{n}", None)
+                    if kc is not None and int(key) == int(kc):
+                        digit_key = ord("0") + n
+                        break
+                if digit_key is None:
+                    # Some builds expose numpad digits as a contiguous range.
+                    np0 = getattr(wx, "WXK_NUMPAD0", None)
+                    np9 = getattr(wx, "WXK_NUMPAD9", None)
+                    if np0 is not None and np9 is not None and int(np0) <= int(key) <= int(np9):
+                        digit_key = ord("0") + (int(key) - int(np0))
+            if digit_key == ord("0") and not (mods & wx.MOD_SHIFT):
                 self._toggle_dotted_duration_selected()
                 return
-            if uni in (ord("1"), ord("2"), ord("3"), ord("4"), ord("5"), ord("6")):
-                digit = int(chr(uni))
+            if digit_key == ord("9") and not (mods & wx.MOD_SHIFT):
+                self._toggle_triplet_duration_selected()
+                return
+
+            if digit_key in (ord("1"), ord("2"), ord("3"), ord("4"), ord("5"), ord("6")):
+                digit = int(chr(digit_key))
                 mapping = {
                     1: self.comp.ppq * 4,
                     2: self.comp.ppq * 2,
@@ -4642,6 +4822,9 @@ Esc closes this quick start tutorial window.'''
                 return
 
 
+        #
+        # (Triplet step is now on 9; Ctrl+9 is reserved for triplet duration.)
+
         # ---- Step length (1-6) and dotted (0) ----
         # 1 Whole, 2 Half, 3 Quarter, 4 Eighth, 5 Sixteenth, 6 Thirty-second
         if not (mods & (wx.MOD_ALT | wx.MOD_SHIFT | wx.MOD_CONTROL)):
@@ -4658,6 +4841,9 @@ Esc closes this quick start tutorial window.'''
                 }
                 self._set_step_ticks(mapping[digit], announce=True)
                 return
+            if uni == ord("9"):
+                self._toggle_step_triplet()
+                return
             if uni == ord("0"):
                 self._toggle_step_dotted()
                 return
@@ -4669,6 +4855,10 @@ Esc closes this quick start tutorial window.'''
             return
 
         # ---- Note entry ----
+        # If Shift is held on digit keys, ignore (prevents Shift+9 etc from acting as note entry).
+        # This keeps 9 reserved for triplet step, and avoids "note creep" from shifted digits.
+        if (mods & wx.MOD_SHIFT) and (ord("0") <= int(key) <= ord("9")) and not (mods & (wx.MOD_CONTROL | wx.MOD_ALT)):
+            return
         uni = evt.GetUnicodeKey()
         if uni != wx.WXK_NONE and uni >= 32:
             ch = chr(uni).lower()
