@@ -20,9 +20,75 @@ from typing import List, Optional, Tuple, Dict, Any
 from scriptHandler import script
 
 try:
+    import config
+except Exception:
+    config = None
+
+try:
+    import nvwave
+except Exception:
+    nvwave = None
+
+try:
     import tones
 except Exception:
     tones = None
+
+
+
+PLAYBACK_ENGINE_TONES = "tones"
+PLAYBACK_ENGINE_SMOOTH = "smooth"
+PLAYBACK_ENGINE_NOKIA = "nokia"
+PLAYBACK_CONFIG_SECTION = "nvdaComposer"
+PLAYBACK_CONFIG_KEY = "livePlaybackEngine"
+PLAYBACK_CONFIG_LEGACY_KEY = "smoothLivePlayback"
+
+
+def _as_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return False
+
+
+def load_live_playback_pref() -> str:
+    if config is None:
+        return PLAYBACK_ENGINE_TONES
+    try:
+        section = config.conf[PLAYBACK_CONFIG_SECTION]
+        raw = str(section.get(PLAYBACK_CONFIG_KEY, "") or "").strip().lower()
+        if raw in {PLAYBACK_ENGINE_TONES, PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA}:
+            return raw
+        enabled = _as_bool(section.get(PLAYBACK_CONFIG_LEGACY_KEY, False))
+        return PLAYBACK_ENGINE_SMOOTH if enabled else PLAYBACK_ENGINE_TONES
+    except Exception:
+        return PLAYBACK_ENGINE_TONES
+
+
+def save_live_playback_pref(engine: str) -> bool:
+    if config is None:
+        return False
+    raw = str(engine).strip().lower()
+    if raw not in {PLAYBACK_ENGINE_TONES, PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA}:
+        raw = PLAYBACK_ENGINE_TONES
+    try:
+        try:
+            section = config.conf[PLAYBACK_CONFIG_SECTION]
+        except Exception:
+            config.conf[PLAYBACK_CONFIG_SECTION] = {}
+            section = config.conf[PLAYBACK_CONFIG_SECTION]
+        section[PLAYBACK_CONFIG_KEY] = raw
+        section[PLAYBACK_CONFIG_LEGACY_KEY] = bool(raw == PLAYBACK_ENGINE_SMOOTH)
+        save = getattr(config.conf, "save", None)
+        if callable(save):
+            save()
+        return True
+    except Exception:
+        return False
+
 
 
 # =========================
@@ -732,21 +798,60 @@ class Composition:
 
 
 # =========================
-# Playback (DO NOT TOUCH AUDIO)
+# Playback
 # =========================
 
 class TonePlayer:
+    _SMOOTH_SAMPLE_RATE = 44100
+    _SMOOTH_CHANNELS = 1
+    _SMOOTH_BITS = 16
+    _SMOOTH_BLOCK_MS = 80
+    _SMOOTH_PREFEED_BLOCKS = 3
+    _SMOOTH_ATTACK_MS = 6
+    _SMOOTH_RELEASE_MS = 10
+    _SMOOTH_AMP = 0.28
+    _NOKIA_AMP = 0.24
+    _NOKIA_DUTY = 0.5
+    _NOKIA_ATTACK_MS = 5
+    _NOKIA_DECAY_MS = 18
+    _NOKIA_RELEASE_MS = 30
+
     def __init__(self):
         self._thread: Optional[threading.Thread] = None
         self._stop = threading.Event()
         self._lock = threading.Lock()
 
-        # Playback position tracking (used for pause/follow cursor).
         self._statusLock = threading.Lock()
         self._is_playing: bool = False
-        self._cur_event_index: Optional[int] = None  # event index (0..len(events))
+        self._cur_event_index: Optional[int] = None
         self._range_start: int = 0
         self._range_end: int = 0
+
+        self._engine: str = load_live_playback_pref()
+
+    def engine(self) -> str:
+        return self._engine
+
+    def engine_label(self, engine: Optional[str] = None) -> str:
+        eng = self._normalize_engine(engine or self._engine)
+        if eng == PLAYBACK_ENGINE_SMOOTH:
+            return "smooth local audio"
+        if eng == PLAYBACK_ENGINE_NOKIA:
+            return "Nokia-style local audio"
+        return "NVDA tones"
+
+    def toggle_engine(self) -> tuple[str, bool]:
+        order = [PLAYBACK_ENGINE_TONES, PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA]
+        try:
+            idx = order.index(self._normalize_engine(self._engine))
+        except ValueError:
+            idx = 0
+        return self.set_engine(order[(idx + 1) % len(order)])
+
+    def set_engine(self, engine: str) -> tuple[str, bool]:
+        self._engine = self._normalize_engine(engine)
+        saved = save_live_playback_pref(self._engine)
+        return self._engine, saved
 
     def stop(self) -> None:
         self._stop.set()
@@ -756,7 +861,6 @@ class TonePlayer:
             return bool(self._is_playing) and not self._stop.is_set()
 
     def current_event_index(self) -> Optional[int]:
-        """Best-effort current event index during playback (0..len(events))."""
         with self._statusLock:
             return self._cur_event_index
 
@@ -769,6 +873,47 @@ class TonePlayer:
         if t and t.is_alive():
             t.join(timeout=0.75)
 
+    def _normalize_engine(self, engine: str) -> str:
+        raw = str(engine or "").strip().lower()
+        if raw in {PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA}:
+            return raw
+        return PLAYBACK_ENGINE_TONES
+
+    def _local_available(self) -> bool:
+        return nvwave is not None
+
+    def _active_engine(self) -> str:
+        eng = self._normalize_engine(self._engine)
+        if eng in {PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA} and self._local_available():
+            return eng
+        return PLAYBACK_ENGINE_TONES
+
+    def _make_wave_player(self):
+        if nvwave is None:
+            return None
+        kwargs = {
+            "channels": self._SMOOTH_CHANNELS,
+            "samplesPerSec": self._SMOOTH_SAMPLE_RATE,
+            "bitsPerSample": self._SMOOTH_BITS,
+        }
+        try:
+            if config is not None:
+                output_device = config.conf["speech"]["outputDevice"]
+                kwargs["outputDevice"] = output_device
+        except Exception:
+            pass
+        kwargs["wantDucking"] = False
+        try:
+            return nvwave.WavePlayer(**kwargs)
+        except TypeError:
+            kwargs.pop("wantDucking", None)
+            try:
+                return nvwave.WavePlayer(**kwargs)
+            except Exception:
+                return None
+        except Exception:
+            return None
+
     def _beep_chunked(self, freq: float, total_ms: int, max_chunk_ms: int = 5000, vol0_100: int = 100) -> None:
         if tones is None:
             return
@@ -776,7 +921,6 @@ class TonePlayer:
         while remaining > 0 and not self._stop.is_set():
             chunk = min(remaining, max_chunk_ms)
             try:
-                # tones.beep usually accepts optional left/right volume (0..100).
                 try:
                     tones.beep(freq, int(chunk), left=vol0_100, right=vol0_100)
                 except TypeError:
@@ -784,6 +928,252 @@ class TonePlayer:
             except Exception:
                 pass
             remaining -= chunk
+
+    def _poly_blep(self, t: float, dt: float) -> float:
+        if dt <= 0.0:
+            return 0.0
+        if dt > 0.5:
+            dt = 0.5
+        if t < dt:
+            x = t / dt
+            return x + x - x * x - 1.0
+        if t > 1.0 - dt:
+            x = (t - 1.0) / dt
+            return x * x + x + x + 1.0
+        return 0.0
+
+    def _render_local_note(self, style: str, freq: float, total_ms: int, vol0_100: int) -> bytes:
+        total_ms = int(max(1, total_ms))
+        sample_rate = self._SMOOTH_SAMPLE_RATE
+        total_samples = max(1, int(round(sample_rate * (total_ms / 1000.0))))
+        vol = clamp(int(vol0_100), 0, 100) / 100.0
+        style = (style or PLAYBACK_ENGINE_SMOOTH).strip().lower()
+        two_pi = 2.0 * math.pi
+
+        if style == PLAYBACK_ENGINE_NOKIA:
+            attack = max(1, int(round(sample_rate * (self._NOKIA_ATTACK_MS / 1000.0))))
+            decay = max(1, int(round(sample_rate * (self._NOKIA_DECAY_MS / 1000.0))))
+            release = max(1, int(round(sample_rate * (self._NOKIA_RELEASE_MS / 1000.0))))
+            sustain = 0.70
+            amp = self._NOKIA_AMP * vol
+            env_total = attack + decay + release
+            if total_samples < env_total:
+                scale = max(0.2, float(total_samples) / float(env_total))
+                attack = max(1, int(round(attack * scale)))
+                decay = max(1, int(round(decay * scale)))
+                release = max(1, int(round(release * scale)))
+        else:
+            attack = max(1, int(round(sample_rate * (self._SMOOTH_ATTACK_MS / 1000.0))))
+            decay = 1
+            release = max(1, int(round(sample_rate * (self._SMOOTH_RELEASE_MS / 1000.0))))
+            sustain = 1.0
+            amp = self._SMOOTH_AMP * vol
+
+        phase = 0.0
+        phase_inc = (two_pi * float(freq)) / float(sample_rate)
+        dt = float(freq) / float(sample_rate)
+        buf = array.array("h")
+
+        for idx in range(total_samples):
+            if idx < attack:
+                env = idx / float(attack)
+            elif idx < attack + decay:
+                env = 1.0 - (1.0 - sustain) * ((idx - attack) / float(decay))
+            elif idx >= total_samples - release:
+                if style == PLAYBACK_ENGINE_NOKIA:
+                    env = sustain * max(0.0, 1.0 - ((idx - (total_samples - release)) / float(release)))
+                else:
+                    env = max(0.0, 1.0 - ((idx - (total_samples - release)) / float(release)))
+            else:
+                env = sustain
+
+            if style == PLAYBACK_ENGINE_NOKIA:
+                t01 = (phase / two_pi) % 1.0
+                sample = 1.0 if t01 < self._NOKIA_DUTY else -1.0
+                sample += self._poly_blep(t01, dt)
+                sample -= self._poly_blep((t01 - self._NOKIA_DUTY) % 1.0, dt)
+            else:
+                sample = math.sin(phase)
+
+            buf.append(int(max(-1.0, min(1.0, sample * amp * env)) * 32767.0))
+            phase += phase_inc
+            if phase >= two_pi:
+                phase %= two_pi
+
+        return buf.tobytes()
+
+    def _sleep_chunk(self, seconds: float) -> None:
+        target = time.perf_counter() + max(0.0, float(seconds))
+        while not self._stop.is_set():
+            remaining = target - time.perf_counter()
+            if remaining <= 0:
+                return
+            time.sleep(min(0.01, remaining))
+
+    def _play_tone_local(self, wave_player, style: str, freq: float, total_ms: int, vol0_100: int = 100) -> None:
+        if wave_player is None:
+            self._sleep_chunk(float(total_ms) / 1000.0)
+            return
+        total_ms = int(max(1, total_ms))
+        data = self._render_local_note(style, freq, total_ms, vol0_100)
+        if not data:
+            self._sleep_chunk(float(total_ms) / 1000.0)
+            return
+
+        bytes_per_sample = max(1, (self._SMOOTH_BITS // 8) * self._SMOOTH_CHANNELS)
+        total_samples = max(1, len(data) // bytes_per_sample)
+        total_chunks = max(1, int(math.ceil(float(total_ms) / float(self._SMOOTH_BLOCK_MS))))
+        chunk_samples = max(1, int(math.ceil(float(total_samples) / float(total_chunks))))
+        chunk_bytes = chunk_samples * bytes_per_sample
+
+        queued: list[int] = []
+        prefeed = max(1, int(self._SMOOTH_PREFEED_BLOCKS))
+        offset = 0
+        remaining_ms = total_ms
+
+        while offset < len(data) and not self._stop.is_set() and len(queued) < prefeed:
+            end = min(len(data), offset + chunk_bytes)
+            chunk = data[offset:end]
+            if end >= len(data):
+                chunk_ms = remaining_ms
+            else:
+                chunk_ms = max(1, int(round(total_ms * ((end - offset) / float(len(data))))))
+                chunk_ms = min(chunk_ms, remaining_ms)
+            try:
+                wave_player.feed(chunk)
+            except Exception:
+                self._sleep_chunk(float(chunk_ms) / 1000.0)
+                return
+            queued.append(chunk_ms)
+            offset = end
+            remaining_ms = max(0, remaining_ms - chunk_ms)
+
+        while queued and not self._stop.is_set():
+            played_ms = queued.pop(0)
+            self._sleep_chunk(float(played_ms) / 1000.0)
+            if offset < len(data) and not self._stop.is_set():
+                end = min(len(data), offset + chunk_bytes)
+                chunk = data[offset:end]
+                if end >= len(data):
+                    chunk_ms = remaining_ms
+                else:
+                    chunk_ms = max(1, int(round(total_ms * ((end - offset) / float(len(data))))))
+                    chunk_ms = min(chunk_ms, remaining_ms)
+                try:
+                    wave_player.feed(chunk)
+                except Exception:
+                    self._sleep_chunk(float(chunk_ms) / 1000.0)
+                    return
+                queued.append(chunk_ms)
+                offset = end
+                remaining_ms = max(0, remaining_ms - chunk_ms)
+
+    def _play_range_tones(self, comp: Composition, start: int, end: int) -> None:
+        if tones is None:
+            self._stop.set()
+            return
+        cur_time = time.perf_counter()
+        BEEP_PORTION = 0.97
+
+        def sleep_until(target: float) -> None:
+            while not self._stop.is_set():
+                now = time.perf_counter()
+                remaining = target - now
+                if remaining <= 0:
+                    return
+                if remaining > 0.004:
+                    time.sleep(min(0.02, remaining - 0.002))
+                else:
+                    while time.perf_counter() < target and not self._stop.is_set():
+                        pass
+                    return
+
+        abs_tick = 0
+        try:
+            for j in range(0, start):
+                abs_tick += int(comp.events[j].dur)
+        except Exception:
+            abs_tick = 0
+
+        for i in range(start, end):
+            if self._stop.is_set():
+                break
+
+            with self._statusLock:
+                self._cur_event_index = int(i)
+
+            ev = comp.events[i]
+            step_s = max(0.001, ticks_to_seconds_with_map(abs_tick, ev.dur, getattr(comp, "tempo_map", None), comp.tempo_bpm, comp.ppq))
+            abs_tick += int(ev.dur)
+            step_ms = int(step_s * 1000.0)
+            beep_ms = max(1, int(step_ms * BEEP_PORTION))
+
+            sleep_until(cur_time)
+            if self._stop.is_set():
+                break
+
+            if ev.kind == "note" and ev.pitch is not None:
+                try:
+                    vel = int(getattr(ev, "vel", getattr(ev, "velocity", 127)) or 127)
+                except Exception:
+                    vel = 127
+                vel = clamp(vel, 1, 127)
+                vol0_100 = int(round((vel / 127.0) * 100.0))
+                vol0_100 = clamp(vol0_100, 0, 100)
+                self._beep_chunked(midi_to_freq(int(ev.pitch)), beep_ms, vol0_100=vol0_100)
+
+            cur_time += step_s
+
+    def _play_range_local(self, comp: Composition, start: int, end: int, style: str) -> bool:
+        wave_player = self._make_wave_player()
+        if wave_player is None:
+            return False
+
+        BEEP_PORTION = 0.985
+        abs_tick = 0
+        try:
+            for j in range(0, start):
+                abs_tick += int(comp.events[j].dur)
+        except Exception:
+            abs_tick = 0
+
+        try:
+            for i in range(start, end):
+                if self._stop.is_set():
+                    break
+
+                with self._statusLock:
+                    self._cur_event_index = int(i)
+
+                ev = comp.events[i]
+                step_s = max(0.001, ticks_to_seconds_with_map(abs_tick, ev.dur, getattr(comp, "tempo_map", None), comp.tempo_bpm, comp.ppq))
+                abs_tick += int(ev.dur)
+                step_ms = max(1, int(round(step_s * 1000.0)))
+
+                if ev.kind == "note" and ev.pitch is not None:
+                    try:
+                        vel = int(getattr(ev, "vel", getattr(ev, "velocity", 127)) or 127)
+                    except Exception:
+                        vel = 127
+                    vel = clamp(vel, 1, 127)
+                    vol0_100 = clamp(int(round((vel / 127.0) * 100.0)), 0, 100)
+                    note_ms = max(1, int(round(step_ms * BEEP_PORTION)))
+                    self._play_tone_local(wave_player, style, midi_to_freq(int(ev.pitch)), note_ms, vol0_100=vol0_100)
+                    gap_ms = max(0, step_ms - note_ms)
+                    if gap_ms:
+                        self._sleep_chunk(float(gap_ms) / 1000.0)
+                else:
+                    self._sleep_chunk(float(step_ms) / 1000.0)
+        finally:
+            try:
+                wave_player.idle()
+            except Exception:
+                pass
+            try:
+                wave_player.stop()
+            except Exception:
+                pass
+        return True
 
     def play_range(self, comp: Composition, start: int, end: int) -> None:
         with self._lock:
@@ -800,68 +1190,20 @@ class TonePlayer:
                 self._cur_event_index = int(start)
                 self._is_playing = True
 
-            def sleep_until(target: float) -> None:
-                while not self._stop.is_set():
-                    now = time.perf_counter()
-                    remaining = target - now
-                    if remaining <= 0:
-                        return
-                    if remaining > 0.004:
-                        time.sleep(min(0.02, remaining - 0.002))
-                    else:
-                        while time.perf_counter() < target and not self._stop.is_set():
-                            pass
-                        return
-
             def run() -> None:
                 try:
-                    if tones is None:
-                        self._stop.set()
-                        return
-                    cur_time = time.perf_counter()
-                    BEEP_PORTION = 0.97
-
-                    # Absolute tick position at the start of playback range, for tempo-map aware timing.
-                    abs_tick = 0
-                    try:
-                        for j in range(0, start):
-                            abs_tick += int(comp.events[j].dur)
-                    except Exception:
-                        abs_tick = 0
-
-                    for i in range(start, end):
-                        if self._stop.is_set():
-                            break
-
-                        with self._statusLock:
-                            self._cur_event_index = int(i)
-
-                        ev = comp.events[i]
-                        step_s = max(0.001, ticks_to_seconds_with_map(abs_tick, ev.dur, getattr(comp, 'tempo_map', None), comp.tempo_bpm, comp.ppq))
-                        abs_tick += int(ev.dur)
-                        step_ms = int(step_s * 1000.0)
-                        beep_ms = max(1, int(step_ms * BEEP_PORTION))
-
-                        sleep_until(cur_time)
-                        if self._stop.is_set():
-                            break
-
-                        if ev.kind == "note" and ev.pitch is not None:
-                            # Map velocity (1..127) to NVDA tone volume (0..100).
-                            try:
-                                vel = int(getattr(ev, 'vel', getattr(ev, 'velocity', 127)) or 127)
-                            except Exception:
-                                vel = 127
-                            vel = clamp(vel, 1, 127)
-                            vol0_100 = int(round((vel / 127.0) * 100.0))
-                            vol0_100 = clamp(vol0_100, 0, 100)
-                            self._beep_chunked(midi_to_freq(int(ev.pitch)), beep_ms, vol0_100=vol0_100)
-
-                        cur_time += step_s
-
+                    active_engine = self._active_engine()
+                    if self._engine in {PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA} and active_engine == PLAYBACK_ENGINE_TONES:
+                        ui.message(f"{self.engine_label(self._engine)} unavailable, using NVDA tones")
+                    if active_engine in {PLAYBACK_ENGINE_SMOOTH, PLAYBACK_ENGINE_NOKIA}:
+                        ok = self._play_range_local(comp, start, end, active_engine)
+                        if not ok:
+                            ui.message(f"{self.engine_label(active_engine)} unavailable, using NVDA tones")
+                            self._play_range_tones(comp, start, end)
+                    else:
+                        self._play_range_tones(comp, start, end)
                 finally:
                     with self._statusLock:
-                        # Best-effort: point to the end of the played range when stopping.
                         if self._cur_event_index is None:
                             self._cur_event_index = int(end)
                         self._is_playing = False
@@ -1942,6 +2284,17 @@ class ComposerDialog(wx.Dialog):
         except Exception:
             pass
         self.Hide()
+
+    def _toggle_playback_engine(self) -> None:
+        was_playing = self.player.is_playing()
+        if was_playing:
+            self._stop_playback(clear_pause=False)
+        engine, saved = self.player.toggle_engine()
+        label = self.player.engine_label(engine)
+        msg = f"Playback engine {label}"
+        if not saved and config is None:
+            msg += ", not saved"
+        ui.message(msg)
 
     def _build_ui(self) -> None:
         main = wx.BoxSizer(wx.VERTICAL)
@@ -4532,6 +4885,10 @@ Esc closes this quick start tutorial window.'''
 
 
         # ---- Transport ----
+        if key == wx.WXK_F8 and not (mods & (wx.MOD_ALT | wx.MOD_CONTROL | wx.MOD_SHIFT)):
+            self._toggle_playback_engine()
+            return
+
         if key == wx.WXK_ESCAPE:
             self._stop_playback("Stop")
             return

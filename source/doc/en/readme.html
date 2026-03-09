@@ -1,332 +1,149 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<title>NVDA Composer 1.5 - Help</title>
-<style>
-  body { font-family: sans-serif; line-height: 1.4; max-width: 72rem; margin: 1rem; }
-  code, kbd { font-family: monospace; }
-  kbd { border: 1px solid #aaa; border-bottom-width: 2px; padding: 0 0.25em; border-radius: 0.2em; background: #f7f7f7; }
-  table { border-collapse: collapse; width: 100%; margin-bottom: 1rem; }
-  th, td { border: 1px solid #ccc; padding: 0.45em; vertical-align: top; }
-  th { background: #f3f3f3; }
-  .small { font-size: 0.95em; }
-  .note { border-left: 4px solid #3a7; padding: 0.6em 0.8em; background: #f3fbf7; }
-  .whatsnew { border-left: 4px solid #36c; padding: 0.6em 0.8em; background: #f3f6ff; }
-  .toc { border: 1px solid #ddd; padding: 0.6em 0.8em; background: #fafafa; }
-  .toc ul { margin: 0.25em 0 0 1.2em; }
-  h2, h3 { scroll-margin-top: 1rem; }
-</style>
+  <meta charset="utf-8">
+  <title>NVDA Composer 1.6.0</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.5; margin: 2em; max-width: 70em; }
+    h1, h2, h3 { line-height: 1.2; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0 1.5em; }
+    th, td { border: 1px solid #999; padding: 0.55em 0.7em; text-align: left; vertical-align: top; }
+    th { background: #f2f2f2; }
+    code { font-family: Consolas, monospace; }
+    .note { background: #f7f7f7; border-left: 4px solid #666; padding: 0.8em 1em; }
+  </style>
 </head>
 <body>
-<h1 id="top">NVDA Composer 1.5</h1>
-<p>
-NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad inside NVDA.
-You enter notes (or rests) on a timeline, select and edit them, and play back your project.
-Projects can be saved to a plain-text format (<code>.txt</code>), imported from MIDI (<code>.mid</code>/<code>.midi</code>) or Nokia ringing tones (<code>.rng</code>),
-and exported as MIDI, WAV, or Nokia <code>.rng</code>.
-</p>
-<div class="note">
-<strong>Download:</strong> All Andre add-ons are available from
-  <a href="https://onj.me/nvda">https://onj.me/nvda</a>
-</div>
-<div class="whatsnew" id="whats-new">
-<h2 id="changelog">Changelog</h2>
-<h3>Version 1.5</h3>
-<ul>
-<li>Key logic refactor for dotted and triplet durations.</li>
-<li>9 now toggles triplet step length.</li>
-<li>0 toggles dotted step length.</li>
-<li>Ctrl+9 toggles triplet duration for selected note(s).</li>
-<li>Ctrl+0 toggles dotted duration for selected note(s).</li>
-<li>Improved duration feedback, preview, and selection restore consistency.</li>
-</ul>
-<h3 id="version-1-4">Version 1.4</h3><ul><li>New: <kbd>Ctrl</kbd>+<kbd>P</kbd> lets you type an exact tempo in BPM.</li><li>Improved: Nokia <code>.rng</code> import/export now uses a consistent volume↔velocity scaling.</li></ul><h3 id="version-1-3">Version 1.3</h3><ul><li>New: Velocity / volume support (adjust with comma/period, Shift+comma/period for larger steps, and press V to type a velocity directly).</li><li>Improved: Share clips now start with #NVDAComposer, use a more compact format, and clipboard import is more forgiving if extra text is copied above/below the clip.</li></ul><h3 id="version-1-2">Version 1.2</h3>
-<ul>
-<li><strong>Custom durations and step length:</strong> press <kbd>`</kbd> to enter an exact custom step (for new notes/rests), or <kbd>Ctrl</kbd>+<kbd>`</kbd> to set an exact duration for the current note or selection.</li>
-<li><strong>Track properties:</strong> <kbd>F2</kbd> lets you set an optional project title and notes/comments (saved with the project).</li>
-<li><strong>Share-friendly clipboard:</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> copies a clip that can include title/tempo/notes as comment lines.</li>
-<li><strong>Paste with metadata:</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> pastes and offers to import the clip’s title/tempo/notes into the current project.</li>
-<li><strong>More tolerant clip import:</strong> Clipboard imports ignore harmless extra text (blank lines, comments, and unknown lines), making social sharing more robust.</li>
-</ul>
-<h3>Also included (from the 1.0 release cycle)</h3>
-<ul>
-<li><strong>Save As:</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> (and <kbd>F12</kbd>) saves a copy under a new name.</li>
-<li><strong>Nokia ringing tones:</strong> import and export <code>.rng</code> via <kbd>Ctrl</kbd>+<kbd>O</kbd> and <kbd>Ctrl</kbd>+<kbd>E</kbd>.</li>
-<li><strong>Markers:</strong> <kbd>Ctrl</kbd>+<kbd>M</kbd> toggles a marker; <kbd>-</kbd>/<kbd>=</kbd> jump between markers.</li>
-<li><strong>Go to:</strong> <kbd>Ctrl</kbd>+<kbd>G</kbd> jumps to a specific position on the timeline.</li>
-<li><strong>Reverse (Easter egg):</strong> <kbd>Shift</kbd>+<kbd>Backspace</kbd> flips the timeline end-to-start.</li>
-<li><strong>Help inside the add-on:</strong> <kbd>F1</kbd> opens this documentation; <kbd>Shift</kbd>+<kbd>F1</kbd> opens the quick tutorial.</li>
-<li><strong>Open demos quickly:</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> opens the file dialog directly in the demos folder.</li>
-<li><strong>Playback follow modes:</strong> <kbd>Ctrl</kbd>+<kbd>F</kbd> toggles Follow playback; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd> toggles Snap on pause.</li>
-</ul>
-</div>
-<div class="toc" id="toc">
-<h2>Contents</h2>
-<ul>
-<li><a href="#project-formats">Project formats</a></li>
-<li><a href="#open-composer">Open the Composer</a></li>
-<li><a href="#entering-notes">Entering notes</a></li>
-<li><a href="#keyboard-shortcuts">Keyboard shortcuts</a>
-<ul>
-<li><a href="#files">Project / files</a></li>
-<li><a href="#playback">Playback</a></li>
-<li><a href="#nav-select">Timeline navigation and selection</a></li>
-<li><a href="#clipboard">Clipboard</a></li>
-<li><a href="#track-properties">Track properties (title and notes)</a></li>
-<li><a href="#share-clips">Share clips</a></li>
-<li><a href="#edit-undo">Edit: delete, undo/redo</a></li>
-<li><a href="#tempo">Tempo</a></li>
-<li><a href="#transpose">Transpose existing notes</a></li>
-<li><a href="#durations">Change duration of existing notes</a></li>
-<li><a href="#step">Step length for new notes/rests</a></li>
-<li><a href="#custom">Custom duration input</a></li>
-<li><a href="#input-shift">Input keyboard shift</a></li>
-<li><a href="#mode-layout-scale">Mode, layout, and scale</a></li>
-<li><a href="#markers">Markers</a></li>
-<li><a href="#goto">Go to</a></li>
-<li><a href="#reverse">Reverse</a></li>
-</ul>
-</li>
-<li><a href="#formats">Formats</a>
-<ul>
-<li><a href="#midi">MIDI import/export</a></li>
-<li><a href="#rng-import">Nokia ringing tone (.rng) import</a></li>
-<li><a href="#rng-export">Nokia ringing tone (.rng) export</a></li>
-<li><a href="#wav">WAV export</a></li>
-</ul>
-</li>
-</ul>
-</div>
-<h2 id="project-formats">Project formats</h2>
-<ul>
-<li><strong>NVDA Composer project</strong> (<code>.txt</code>) – native save format.</li>
-<li><strong>MIDI</strong> (<code>.mid</code>, <code>.midi</code>) – import/export.</li>
-<li><strong>Nokia ringing tone</strong> (<code>.rng</code>) – import and export (monophonic; patterns/loops are flattened on import).</li>
-<li><strong>WAV</strong> (<code>.wav</code>) – export. (Includes a Nokia-style tone option.)</li>
-</ul>
-<h2 id="open-composer">Open the Composer</h2>
-<ul>
-<li><kbd>NVDA</kbd>+<kbd>Alt</kbd>+<kbd>N</kbd>: Open NVDA Composer.</li>
-</ul>
-<h2 id="entering-notes">Entering notes</h2>
-<p>
-NVDA Composer is designed for fast, screen-reader-friendly note entry. The basic loop is:
-choose a step length → move the cursor → enter notes/rests → play back.
-</p>
-<h3 id="note-entry-step">Step length (new notes and rests)</h3>
-<ul>
-<li><kbd>1</kbd>–<kbd>6</kbd>: set step length (whole, half, quarter, eighth, sixteenth, thirty-second).</li>
-<li><kbd>0</kbd>: toggle dotted / undotted step.</li>
-<li><kbd>`</kbd> (grave; on some keyboards this is <kbd>¬</kbd>): type a custom step length.</li>
-<li>9 toggles triplet step length.</li><li>Ctrl+9 toggles triplet duration for selected note(s).</li></ul>
-<h3 id="note-entry-input">Input pitch and inserting</h3>
-<ul>
-<li><kbd>Left</kbd> / <kbd>Right</kbd>: move the timeline cursor by one step.</li>
-<li>Press a note key to insert a note at the cursor (then the cursor advances by one step).</li>
-<li><kbd>Space</kbd>: insert a rest.</li>
-<li><kbd>Up</kbd> / <kbd>Down</kbd>: shift the input pitch by 1 semitone (affects new notes).</li>
-<li><kbd>Alt</kbd>+<kbd>Up</kbd> / <kbd>Alt</kbd>+<kbd>Down</kbd>: shift the input pitch by 1 octave.</li>
-</ul>
-<h3 id="note-entry-layouts">Grid vs QWERTY layouts (Ctrl+K)</h3>
-<p>
-<kbd>Ctrl</kbd>+<kbd>K</kbd> switches the note-entry keyboard:
-</p>
-<ul>
-<li><strong>Grid layout</strong> (default): a compact “pad” on <kbd>J</kbd> <kbd>K</kbd> <kbd>L</kbd> / <kbd>U</kbd> <kbd>I</kbd> <kbd>O</kbd> / <kbd>7</kbd> <kbd>8</kbd>.</li>
-<li><strong>QWERTY layout</strong>: a longer “piano-ish” row on <kbd>A</kbd> <kbd>W</kbd> <kbd>S</kbd> <kbd>E</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>T</kbd> <kbd>G</kbd> <kbd>Y</kbd> <kbd>H</kbd> <kbd>U</kbd> <kbd>J</kbd> <kbd>K</kbd>.</li>
-</ul>
-<p>
-The layout only changes which keys insert notes; everything else (step length, playback, selection, etc.) stays the same.
-</p>
-<h3 id="note-entry-scale">Chromatic vs Scale mode</h3>
-<ul>
-<li><kbd>Ctrl</kbd>+<kbd>T</kbd>: toggle <strong>Chromatic</strong> (semitones) vs <strong>Scale</strong> mode (scale degrees).</li>
-<li><kbd>Alt</kbd>+<kbd>Left</kbd> / <kbd>Alt</kbd>+<kbd>Right</kbd>: change the current scale (used in Scale mode).</li>
-</ul>
-<h4 id="note-entry-reference">Key maps (reference)</h4>
-<p>
-In Chromatic mode, the keys are semitone offsets from the current input pitch.
-In Scale mode, they are scale degrees (0 = root).
-</p>
-<table>
-<tr><th>Layout</th><th>Keys that insert notes</th><th>Chromatic</th><th>Scale</th></tr>
-<tr>
-<td>Grid</td>
-<td>J K L U I O 7 8</td>
-<td>Offsets 0–8</td>
-<td>Degrees 0–8</td>
-</tr>
-<tr>
-<td>QWERTY</td>
-<td><kbd>A</kbd> <kbd>W</kbd> <kbd>S</kbd> <kbd>E</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>T</kbd> <kbd>G</kbd> <kbd>Y</kbd> <kbd>H</kbd> <kbd>U</kbd> <kbd>J</kbd> <kbd>K</kbd></td>
-<td>Offsets 0–12</td>
-<td><kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> <kbd>F</kbd> <kbd>G</kbd> <kbd>H</kbd> <kbd>J</kbd> <kbd>K</kbd> = degrees 0–7</td>
-</tr>
-</table>
-<h2 id="keyboard-shortcuts">Keyboard shortcuts</h2>
-<h3 id="files">Project / files</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>N</kbd></td><td>New project (resets to defaults).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>O</kbd></td><td>Open <code>.txt</code> or import <code>.mid/.midi</code> or <code>.rng</code>.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd></td><td>Open/Import, starting directly in the add-on <b>demos</b> folder.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save the current project (<code>.txt</code>).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd> (or <kbd>F12</kbd>)</td><td>Save As (save a copy under a new name).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>E</kbd></td><td>Export: choose <b>MIDI</b> (<code>.mid</code>/<code>.midi</code>), <b>WAV</b> (<code>.wav</code>), or <b>Nokia</b> (<code>.rng</code>) in one Save dialog.</td></tr>
-<tr><td><kbd>F1</kbd></td><td>Open this documentation in your browser.</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>F1</kbd></td><td>Open the in-add-on quick tutorial.</td></tr>
-<tr><td><kbd>F2</kbd></td><td>Edit track properties (project title and notes/comments).</td></tr>
-</table>
-<h3 id="playback">Playback</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Enter</kbd></td><td>Play the whole project (Beginning → End).</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Enter</kbd></td><td>Play from Beginning up to the cursor.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Enter</kbd></td><td>Play from the cursor to End.</td></tr>
-<tr><td><kbd>Esc</kbd></td><td>Stop playback.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Space</kbd></td><td>Pause / resume playback.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>Toggle <b>Follow playback</b> (cursor can track playback while playing).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td>Toggle <b>Snap on pause</b> (cursor jumps to the paused position when you pause).</td></tr>
-</table>
-<h3 id="nav-select">Timeline navigation and selection</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Left</kbd> / <kbd>Right</kbd></td><td>Move to previous/next event on the timeline.</td></tr>
-<tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>Jump to Beginning / End.</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Left</kbd> / <kbd>Shift</kbd>+<kbd>Right</kbd></td><td>Extend selection by one event (does not play the entire selection).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>A</kbd></td><td>Select all events (excluding Beginning/End).</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Space</kbd></td><td>Play only the currently selected range.</td></tr>
-</table>
-<h3 id="clipboard">Clipboard</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Copy selected events (or the current event if nothing is selected) to the system clipboard.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>V</kbd></td><td>Paste clipboard events at the cursor position.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd></td><td>Copy a share clip (includes optional title/tempo/notes as comment lines).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd></td><td>Paste, and offer to import the clip’s title/tempo/notes into the current project.</td></tr>
-</table>
-<p class="small">Because the system clipboard is used, you can copy from one Composer window and paste into another. Clips may also include harmless comment lines (starting with # or ;) which are ignored on import.</p>
-<h3 id="track-properties">Track properties (title and notes)</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>F2</kbd></td><td>Edit the project title and notes/comments. The title is used for the project announcement when available; otherwise the filename is announced.</td></tr>
-</table>
-<h2 id="share-clips">Share clips</h2>
-<ul>
-<li>Use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> to copy a share clip. If you have a selection, only that range is copied; otherwise the whole project is copied.</li>
-<li>Use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> to paste a share clip. If it contains <code># tempo:</code>, <code># title:</code>, or <code># notes:</code> comment lines, you can choose whether to import them.</li>
-<li><strong>Tip for social media:</strong> paste the clip inside a code block (triple backticks) to preserve line breaks.</li>
-<li>Clipboard import tolerates blank lines, comment lines (<code>#</code>, <code>;</code>, <code>//</code>), unknown lines, and even clips where newlines were turned into literal <code>\n</code>.</li>
-</ul>
-<h3 id="edit-undo">Edit: delete, undo/redo</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Backspace</kbd></td><td>Delete selection, or delete the current event. If the cursor is at End, Backspace deletes the previous event.</td></tr>
-<tr><td><kbd>Delete</kbd></td><td>Delete selection, or delete the current event (forward delete).</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>Undo.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Y</kbd></td><td>Redo.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd></td><td>Redo (alternative).</td></tr>
-</table>
-<h3 id="tempo">Tempo</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td>Type an exact tempo in BPM.</td></tr>
-<tr><td><kbd>Page Up</kbd></td><td>Increase tempo by 1 BPM.</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Page Up</kbd></td><td>Increase tempo by 10 BPM.</td></tr>
-<tr><td><kbd>Page Down</kbd></td><td>Decrease tempo by 1 BPM.</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Page Down</kbd></td><td>Decrease tempo by 10 BPM.</td></tr>
-</table>
-<h3 id="transpose">Transpose existing notes (current or selection)</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Up</kbd> / <kbd>Shift</kbd>+<kbd>Down</kbd></td><td>Transpose by 1 semitone.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Up</kbd> / <kbd>Ctrl</kbd>+<kbd>Down</kbd></td><td>Transpose by 1 octave (12 semitones).</td></tr>
-</table>
-<h3 id="durations">Change duration of existing notes (current or selection)</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Left</kbd></td><td>Shorten selected note(s) by one step.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>Right</kbd></td><td>Lengthen selected note(s) by one step.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>1</kbd> … <kbd>Ctrl</kbd>+<kbd>6</kbd></td><td>Set selected note(s) duration to Whole/Half/Quarter/Eighth/Sixteenth/Thirty-second.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>0</kbd></td><td>Toggle dotted duration for the selected note(s).</td></tr><tr><td><kbd>Ctrl</kbd>+<kbd>9</kbd></td><td>Toggle triplet duration for the selected note(s).</td></tr>
-</table>
-<h3 id="velocity">Velocity / volume</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>,</kbd> / <kbd>.</kbd></td><td>Decrease / increase velocity (volume) for <b>new notes</b>. If you have a selection, changes velocity for the selected notes instead.</td></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>,</kbd> / <kbd>Shift</kbd>+<kbd>.</kbd></td><td>Decrease / increase velocity in larger steps.</td></tr>
-<tr><td><kbd>V</kbd></td><td>Type a velocity value (1–127). Applies to selected notes if you have a selection; otherwise sets the input velocity for new notes.</td></tr>
-</table>
-<p class="small">Velocity is written to MIDI exports, WAV renders, and Nokia <code>.rng</code> volume instructions.</p>
-<h3 id="step">Step length for new notes/rests</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>1</kbd> … <kbd>6</kbd></td><td>Set step for new notes/rests to Whole/Half/Quarter/Eighth/Sixteenth/Thirty-second.</td></tr>
-<tr><td><kbd>0</kbd></td><td>Toggle dotted step (affects new notes/rests).</td></tr><tr><td><kbd>9</kbd></td><td>Toggle triplet step (affects new notes/rests).</td></tr>
-</table>
-<h3 id="custom">Custom duration input</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>`</kbd></td><td>Enter a custom step length for new notes/rests.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>`</kbd></td><td>Set an exact duration for the current note (or the selection).</td></tr>
-</table>
-<p class="small">
-Accepted inputs: ticks (e.g. <code>333</code> or <code>333t</code>), beats as quarter-notes (e.g. <code>1.5b</code>), beats with explicit PPQ (e.g. <code>1.5b480</code>), or fractions of a whole note (e.g. <code>3/16</code>).
-On UK layouts, the same key may be labelled <kbd>¬</kbd>.
-</p>
-<h3 id="input-shift">Input keyboard shift (affects new notes)</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Up</kbd> / <kbd>Down</kbd></td><td>Shift the input keyboard by 1 semitone.</td></tr>
-<tr><td><kbd>Alt</kbd>+<kbd>Up</kbd> / <kbd>Alt</kbd>+<kbd>Down</kbd></td><td>Shift the input keyboard by 1 octave.</td></tr>
-</table>
-<h3 id="mode-layout-scale">Mode, layout, and scale</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>T</kbd></td><td>Toggle Scale mode / Chromatic mode.</td></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>K</kbd></td><td>Toggle note-entry layout: Grid / QWERTY.</td></tr>
-<tr><td><kbd>Alt</kbd>+<kbd>Left</kbd> / <kbd>Alt</kbd>+<kbd>Right</kbd></td><td>Cycle through available scales.</td></tr>
-</table>
-<h3 id="markers">Markers</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>M</kbd></td><td>Toggle a marker at the current cursor position (saved with the project).</td></tr>
-<tr><td><kbd>-</kbd></td><td>Jump to previous marker.</td></tr>
-<tr><td><kbd>=</kbd></td><td>Jump to next marker.</td></tr>
-</table>
-<h3 id="goto">Go to</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Ctrl</kbd>+<kbd>G</kbd></td><td>Go to a position on the timeline (event number, ticks, or begin/end).</td></tr>
-</table>
-<h3 id="reverse">Reverse</h3>
-<table>
-<tr><th>Key</th><th>Action</th></tr>
-<tr><td><kbd>Shift</kbd>+<kbd>Backspace</kbd></td><td>Reverse the entire timeline (Easter egg).</td></tr>
-</table>
-<h2 id="formats">Formats</h2>
-<h3 id="midi">MIDI import/export</h3>
-<ul>
-<li><b>Open/import</b>: <kbd>Ctrl</kbd>+<kbd>O</kbd> supports multi-track MIDI. All tracks are merged and made monophonic.</li>
-<li><b>Export</b>: <kbd>Ctrl</kbd>+<kbd>E</kbd> writes MIDI (and tempo changes if present).</li>
-</ul>
-<h3 id="rng-import">Nokia ringing tone (.rng) import</h3>
-<ul>
-<li><b>Open/import</b>: <kbd>Ctrl</kbd>+<kbd>O</kbd> can import Nokia/Smart Messaging ringing tones (<code>.rng</code>).</li>
-<li>Ringing tones are monophonic; patterns/loops are flattened into a single note/rest timeline.</li>
-</ul>
-<h3 id="rng-export">Nokia ringing tone (.rng) export</h3>
-<ul>
-<li><b>Export</b>: <kbd>Ctrl</kbd>+<kbd>E</kbd> → choose <b>Nokia (.rng)</b> to export a ringtone suitable for classic Smart Messaging phones.</li>
-<li>Export is monophonic, and durations are quantized to what the format supports.</li>
-</ul>
-<h3 id="wav">WAV export</h3>
-<ul>
-<li><kbd>Ctrl</kbd>+<kbd>E</kbd> → choose <b>WAV</b> to render an audio file of your project.</li>
-<li>The export dialog includes a standard tone render and a “Nokia-style” tone render.</li>
-</ul>
-<p class="small"><a href="#top">Back to top</a></p>
+  <h1>NVDA Composer 1.6.0</h1>
+
+  <h2>What’s new in 1.6.0</h2>
+  <ul>
+    <li>Added <strong>F8</strong> to cycle the live playback engine while in the composer window.</li>
+    <li>Playback modes now cycle through <strong>NVDA tones</strong>, <strong>smooth local audio</strong>, and <strong>Nokia-style local audio</strong>.</li>
+    <li>The selected playback engine is stored persistently in NVDA’s configuration, so your last choice is remembered.</li>
+  </ul>
+
+  <div class="note">
+    <p><strong>Playback engine toggle:</strong> Press <code>F8</code> in the composer window to switch between the three live playback modes. The default remains <strong>NVDA tones</strong>.</p>
+  </div>
+
+  <h2>Keyboard shortcuts</h2>
+
+  <h3>Global</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>NVDA+Alt+N</code></td><td>Open NVDA Composer.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Playback and transport</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Enter</code></td><td>Play from the start.</td></tr>
+      <tr><td><code>Ctrl+Enter</code></td><td>Play from the cursor.</td></tr>
+      <tr><td><code>Shift+Enter</code></td><td>Play up to the cursor.</td></tr>
+      <tr><td><code>Ctrl+Space</code></td><td>Pause or resume playback.</td></tr>
+      <tr><td><code>Esc</code></td><td>Stop playback.</td></tr>
+      <tr><td><code>F8</code></td><td>Cycle live playback engine: NVDA tones → smooth local audio → Nokia-style local audio.</td></tr>
+      <tr><td><code>Ctrl+F</code></td><td>Toggle follow playback.</td></tr>
+      <tr><td><code>Ctrl+Shift+F</code></td><td>Toggle snap on pause.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Step length for new notes and rests</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>1</code> to <code>6</code></td><td>Set step length from whole note through 32nd note.</td></tr>
+      <tr><td><code>0</code></td><td>Toggle dotted step for new notes and rests.</td></tr>
+      <tr><td><code>Ctrl+9</code></td><td>Toggle triplet step for new notes and rests.</td></tr>
+      <tr><td><code>`</code> (grave, often <code>¬</code>)</td><td>Enter a custom step length.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Editing durations of the current note or selection</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Ctrl+Left</code> / <code>Ctrl+Right</code></td><td>Shorten or lengthen by one step.</td></tr>
+      <tr><td><code>Ctrl+1</code> to <code>Ctrl+6</code></td><td>Set duration from whole note through 32nd note.</td></tr>
+      <tr><td><code>Ctrl+0</code></td><td>Toggle dotted duration.</td></tr>
+      <tr><td><code>Ctrl+9</code></td><td>Toggle triplet duration.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Navigation and entry</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Left</code> / <code>Right</code></td><td>Move the timeline cursor by one step.</td></tr>
+      <tr><td><code>Home</code> / <code>End</code></td><td>Jump to the start or end of the timeline.</td></tr>
+      <tr><td><code>Space</code></td><td>Insert a rest.</td></tr>
+      <tr><td><code>Up</code> / <code>Down</code></td><td>Shift the input pitch by one semitone.</td></tr>
+      <tr><td><code>Alt+Up</code> / <code>Alt+Down</code></td><td>Shift the input pitch by one octave.</td></tr>
+      <tr><td><code>Page Up</code> / <code>Page Down</code></td><td>Increase or decrease tempo by 1 BPM.</td></tr>
+      <tr><td><code>Shift+Page Up</code> / <code>Shift+Page Down</code></td><td>Increase or decrease tempo by 10 BPM.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Note-entry layout and scale</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Ctrl+K</code></td><td>Toggle Grid versus QWERTY note-entry layout.</td></tr>
+      <tr><td><code>Ctrl+T</code></td><td>Toggle Scale mode versus Chromatic mode.</td></tr>
+      <tr><td><code>Alt+Left</code> / <code>Alt+Right</code></td><td>Cycle through scales.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Selection and editing</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Ctrl+A</code></td><td>Select all events.</td></tr>
+      <tr><td><code>Backspace</code> / <code>Delete</code></td><td>Delete the current event or selection.</td></tr>
+      <tr><td><code>Shift+Up</code> / <code>Shift+Down</code></td><td>Transpose selected note(s) by one semitone.</td></tr>
+      <tr><td><code>Ctrl+Up</code> / <code>Ctrl+Down</code></td><td>Transpose selected note(s) by one octave.</td></tr>
+      <tr><td><code>Ctrl+Z</code></td><td>Undo.</td></tr>
+      <tr><td><code>Ctrl+Y</code> or <code>Ctrl+Shift+Z</code></td><td>Redo.</td></tr>
+      <tr><td><code>Ctrl+C</code></td><td>Copy selection.</td></tr>
+      <tr><td><code>Ctrl+V</code></td><td>Paste.</td></tr>
+      <tr><td><code>Ctrl+Shift+C</code></td><td>Copy share clip, including optional metadata comments.</td></tr>
+      <tr><td><code>Ctrl+Shift+V</code></td><td>Paste and optionally import metadata.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>File and project commands</h3>
+  <table>
+    <thead>
+      <tr><th>Shortcut</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>Ctrl+N</code></td><td>New project.</td></tr>
+      <tr><td><code>Ctrl+O</code></td><td>Open or import a project or supported file.</td></tr>
+      <tr><td><code>Ctrl+Shift+O</code></td><td>Open or import, starting in the demos folder.</td></tr>
+      <tr><td><code>Ctrl+S</code></td><td>Save.</td></tr>
+      <tr><td><code>Ctrl+Shift+S</code> or <code>F12</code></td><td>Save As.</td></tr>
+      <tr><td><code>Ctrl+E</code></td><td>Export.</td></tr>
+      <tr><td><code>Ctrl+P</code></td><td>Set tempo from prompt.</td></tr>
+      <tr><td><code>F1</code></td><td>Open the full documentation.</td></tr>
+    </tbody>
+  </table>
 </body>
 </html>
