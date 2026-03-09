@@ -611,18 +611,6 @@ def dur_label(ticks: int, ppq: int) -> str:
             return name
 
     return f"{ticks} ticks"
-    common = [
-        (ppq * 4, "Whole"),
-        (ppq * 2, "Half"),
-        (ppq, "Quarter"),
-        (ppq // 2, "Eighth"),
-        (ppq // 4, "Sixteenth"),
-        (ppq // 8, "Thirty-second"),
-    ]
-    for t, name in common:
-        if t == ticks:
-            return name
-    return f"{ticks} ticks"
 
 
 # =========================
@@ -1772,74 +1760,70 @@ def _rng_note_value_for_pitch(pitch: int) -> int:
     semi = p % 12  # C=0 .. B=11
     return int(_RNG_SEMITONE_TO_NOTE.get(semi, 0b0001))  # default C
 
-def _write_rng_file(path: str, events: List[Event], tempo_bpm: int, ppq: int, title: str = "composition") -> None:
-    """
-    Write a Nokia Smart Messaging Ringing Tone (.rng) file.
+def _write_rng_instruction(bw: _BitWriter, kind: str, payload: Any) -> None:
+    if kind == "tempo_code":
+        bw.write_bits(_RNG_I_TEMPO, 3)
+        bw.write_bits(int(payload) & 0x1F, 5)
+    elif kind == "scale":
+        bw.write_bits(_RNG_I_SCALE, 3)
+        bw.write_bits(int(payload) & 0x03, 2)
+    elif kind == "style":
+        bw.write_bits(_RNG_I_STYLE, 3)
+        bw.write_bits(int(payload) & 0x03, 2)
+    elif kind == "volume":
+        bw.write_bits(_RNG_I_VOLUME, 3)
+        bw.write_bits(int(payload) & 0x0F, 4)
+    elif kind == "note":
+        note_val, dur_code, dur_spec = payload
+        bw.write_bits(_RNG_I_NOTE, 3)
+        bw.write_bits(int(note_val) & 0x0F, 4)
+        bw.write_bits(int(dur_code) & 0x07, 3)
+        bw.write_bits(int(dur_spec) & 0x03, 2)
+    else:
+        raise ValueError(f"Unsupported RNG instruction kind: {kind}")
 
-    Export is monophonic; we write a single pattern with (tempo, style, volume, scale changes, notes).
-    """
+
+def _rng_chunk_instruction_stream(instrs: List[Tuple[str, Any]], max_chunk_size: int = 255) -> List[List[Tuple[str, Any]]]:
+    max_chunk_size = clamp(int(max_chunk_size), 1, 255)
+    return [instrs[i:i + max_chunk_size] for i in range(0, len(instrs), max_chunk_size)] or [[]]
+
+
+def _write_rng_file(path: str, events: List[Event], tempo_bpm: int, ppq: int, title: str = "composition") -> None:
+    """Write a Nokia Smart Messaging Ringing Tone (.rng) file."""
     bw = _BitWriter()
 
-    # Command: [len=2][rtprog][sound ...][end=0]
     bw.write_bits(2, 8)
-
-    # Part 1: Ringing-tone-programming: 7 bits, then align.
     bw.write_bits(_RNG_CMD_RTPROG, 7)
     bw.align_byte()
-
-    # Part 2: Sound
     bw.write_bits(_RNG_CMD_SOUND, 7)
 
-    # Song type: basic song (001)
     bw.write_bits(0b001, 3)
 
-    # Title (ISO-8859-1 default charset, unicode disabled). Limit to 15 chars.
-    safe_title = (title or "composition").strip()
-    if not safe_title:
-        safe_title = "composition"
-    safe_title = safe_title[:15]
-    raw_title = safe_title.encode("latin-1", errors="replace")
+    safe_title = (title or "composition").strip() or "composition"
+    raw_title = safe_title[:15].encode("latin-1", errors="replace")
     bw.write_bits(len(raw_title) & 0x0F, 4)
     bw.write_bytes(raw_title)
 
-    # Temporary song: 1 pattern
-    bw.write_bits(1, 8)  # song-sequence-length
-
-    # Pattern header
-    bw.write_bits(_RNG_I_PATTERN, 3)  # pattern-header-id = 000
-    bw.write_bits(0b00, 2)            # pattern-id: A-part
-    bw.write_bits(0, 4)               # loop-value: 0 => play once
-
-    # Build instruction stream.
     instrs: List[Tuple[str, Any]] = []
 
-    # Tempo (nearest Nokia BPM)
     bpm_code = _rng_nearest_bpm_code(int(tempo_bpm) if tempo_bpm else 63)
     instrs.append(("tempo_code", int(bpm_code)))
-
-    # Style: natural (00) is the Nokia default. Continuous can sound more "tied".
-    # We keep natural to match most classic Composer tones.
     instrs.append(("style", 0b00))
 
-    # Volume: default level-7 (0111)
     current_vol_code = 0b0111
     instrs.append(("volume", int(current_vol_code)))
-
-    # Notes: scale changes + note instructions.
     current_scale = None
 
     def emit_note_or_rest(note_val: int, dur_code: int, dur_spec: int) -> None:
         instrs.append(("note", (int(note_val), int(dur_code), int(dur_spec))))
 
-    # Flatten to monophonic: we use each event in sequence.
     for ev in events:
         dur = int(getattr(ev, "dur", 0) or 0)
         if dur <= 0:
             continue
 
-        # Map per-note velocity to Nokia volume (0..15). If it changes, emit a volume instruction.
         try:
-            vel = int(getattr(ev, 'vel', 127) or 127)
+            vel = int(getattr(ev, "vel", 127) or 127)
         except Exception:
             vel = 127
         vol_code = int(round((clamp(vel, 1, 127) / 127.0) * 15.0))
@@ -1848,18 +1832,12 @@ def _write_rng_file(path: str, events: List[Event], tempo_bpm: int, ppq: int, ti
             current_vol_code = vol_code
             instrs.append(("volume", int(current_vol_code)))
 
-        # Split durations into representable chunks.
-        # Nokia RNG supports only a discrete set of durations. We prefer to UNDER-shoot and, if a tiny
-        # remainder remains (< minimum representable), we merge it into the previous chunk instead of
-        # emitting an extra (spurious) note/rest on round-trip.
         remaining = dur
         last_note_instr_index: Optional[int] = None
-        last_qticks: int = 0
+        last_qticks = 0
         min_qticks = int(_RNG_DUR_CANDS[0][0]) if _RNG_DUR_CANDS else 40
 
         while remaining > 0:
-            # If the remainder is too small to represent, merge it into the previous note/rest by bumping
-            # that duration to the nearest representable value.
             if remaining < min_qticks and last_note_instr_index is not None:
                 desired = int(last_qticks + remaining)
                 nq, ndur_code, ndur_spec = _rng_pick_duration_nearest(desired)
@@ -1873,7 +1851,7 @@ def _write_rng_file(path: str, events: List[Event], tempo_bpm: int, ppq: int, ti
 
             qticks, dur_code, dur_spec = _rng_pick_duration(remaining)
             if ev.kind == "rest" or getattr(ev, "pitch", None) is None:
-                emit_note_or_rest(0b0000, dur_code, dur_spec)  # pause
+                emit_note_or_rest(0b0000, dur_code, dur_spec)
                 last_note_instr_index = len(instrs) - 1
                 last_qticks = int(qticks)
             else:
@@ -1891,33 +1869,22 @@ def _write_rng_file(path: str, events: List[Event], tempo_bpm: int, ppq: int, ti
             if qticks <= 0:
                 break
 
-    # Pattern specifier: number of following pattern instructions.
-    bw.write_bits(len(instrs) & 0xFF, 8)
+    chunks = _rng_chunk_instruction_stream(instrs)
+    if len(chunks) > 255:
+        raise ValueError("RNG export exceeds the maximum pattern sequence length")
 
-    # Write instructions.
-    for kind, payload in instrs:
-        if kind == "tempo_code":
-            bw.write_bits(_RNG_I_TEMPO, 3)
-            bw.write_bits(int(payload) & 0x1F, 5)
-        elif kind == "scale":
-            bw.write_bits(_RNG_I_SCALE, 3)
-            bw.write_bits(int(payload) & 0x03, 2)
-        elif kind == "style":
-            bw.write_bits(_RNG_I_STYLE, 3)
-            bw.write_bits(int(payload) & 0x03, 2)
-        elif kind == "volume":
-            bw.write_bits(_RNG_I_VOLUME, 3)
-            bw.write_bits(int(payload) & 0x0F, 4)
-        elif kind == "note":
-            note_val, dur_code, dur_spec = payload
-            bw.write_bits(_RNG_I_NOTE, 3)
-            bw.write_bits(int(note_val) & 0x0F, 4)
-            bw.write_bits(int(dur_code) & 0x07, 3)
-            bw.write_bits(int(dur_spec) & 0x03, 2)
+    bw.write_bits(len(chunks) & 0xFF, 8)
 
-    # Align the sound command-part, then terminate the command stream.
+    for chunk_index, chunk in enumerate(chunks):
+        bw.write_bits(_RNG_I_PATTERN, 3)
+        bw.write_bits(chunk_index % 4, 2)
+        bw.write_bits(0, 4)
+        bw.write_bits(len(chunk) & 0xFF, 8)
+        for kind, payload in chunk:
+            _write_rng_instruction(bw, kind, payload)
+
     bw.align_byte()
-    bw.write_bits(0, 8)  # command-end
+    bw.write_bits(0, 8)
 
     data = bw.to_bytes()
     with open(path, "wb") as f:

@@ -1,0 +1,916 @@
+NVDA_COMPOSER_TXT v6
+tempo 600
+ppq 480
+step 240
+base 60
+transpose 0
+keyPc 0
+keyName C
+chromatic 1
+scale 0
+qwerty 1
+title Bouncing Round the Classroom
+notes
+NVDA Composer version by Gavin Grundlingh, originally composed by Andre Louis (FreakyFwoof).
+endNotes
+markers
+marker 0
+marker 7680
+marker 15360
+marker 23040
+marker 30720
+marker 38400
+marker 46080
+marker 53760
+marker 61440
+marker 69120
+marker 76800
+marker 84480
+marker 92160
+marker 99840
+marker 107520
+marker 115200
+endMarkers
+events
+note 53 60 127
+note 77 60 127
+note 81 60 127
+note 77 60 127
+rest 240
+rest 480
+note 69 60 127
+note 65 60 127
+note 89 60 127
+note 93 60 127
+rest 240
+note 88 60 127
+note 92 60 127
+note 88 60 127
+note 92 60 127
+rest 240
+note 48 60 127
+note 89 60 127
+note 93 60 127
+note 89 60 127
+rest 240
+rest 480
+note 69 60 127
+note 65 60 127
+note 84 60 127
+note 89 60 127
+rest 240
+note 83 60 127
+note 88 60 127
+note 83 60 127
+note 88 60 127
+rest 240
+note 57 60 127
+note 84 60 127
+note 89 60 127
+note 84 60 127
+rest 240
+rest 480
+note 69 60 127
+note 77 60 127
+note 65 60 127
+note 60 60 127
+rest 240
+note 79 240 127
+rest 240
+note 53 60 127
+note 81 60 127
+note 53 60 127
+note 81 60 127
+rest 240
+note 82 240 127
+rest 240
+note 69 60 127
+note 84 60 127
+note 65 60 127
+note 60 60 127
+rest 240
+note 85 240 127
+rest 240
+note 46 60 127
+note 87 60 127
+note 84 60 127
+note 87 60 127
+rest 240
+rest 480
+note 68 60 127
+note 65 60 127
+note 85 60 127
+note 82 60 127
+rest 240
+rest 480
+note 53 60 127
+note 84 60 127
+note 80 60 127
+note 84 60 127
+rest 240
+rest 480
+note 68 60 127
+note 65 60 127
+note 82 60 127
+note 79 60 127
+rest 240
+rest 480
+note 51 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 51 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 58 120 127
+note 80 120 127
+note 67 120 127
+note 61 120 127
+note 58 120 127
+note 80 120 127
+note 67 120 127
+note 61 120 127
+note 55 120 127
+note 82 120 127
+note 79 120 127
+note 82 120 127
+note 55 120 127
+note 82 120 127
+note 79 120 127
+note 82 120 127
+note 56 120 127
+note 82 120 127
+note 65 120 127
+note 61 120 127
+note 56 120 127
+note 70 120 127
+note 65 120 127
+note 61 120 127
+note 44 120 127
+note 80 120 127
+note 84 120 127
+note 80 120 127
+note 84 480 127
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 240
+rest 480
+note 48 240 127
+rest 240
+rest 480
+note 72 60 127
+note 67 60 127
+note 63 60 127
+note 60 60 127
+rest 240
+rest 480
+note 51 240 127
+rest 240
+rest 480
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 240
+rest 480
+note 56 240 127
+rest 240
+rest 480
+note 72 60 127
+note 68 60 127
+note 80 60 127
+note 85 60 127
+rest 240
+note 84 240 127
+rest 240
+note 55 120 127
+note 82 120 127
+note 74 120 127
+note 79 120 127
+note 82 120 127
+note 74 120 127
+note 79 120 127
+note 82 120 127
+note 58 120 127
+note 65 120 127
+note 69 120 127
+note 72 120 127
+note 82 120 127
+note 74 120 127
+note 79 120 127
+note 82 120 127
+note 47 240 127
+note 82 240 127
+rest 480
+note 58 60 127
+note 65 60 127
+note 84 60 127
+note 79 60 127
+rest 240
+note 85 240 127
+rest 240
+note 48 120 127
+note 84 120 127
+note 73 120 127
+note 79 120 127
+note 84 120 127
+note 73 120 127
+note 79 120 127
+note 84 120 127
+note 58 60 127
+note 64 60 127
+note 73 60 127
+note 79 60 127
+note 84 240 127
+rest 480
+note 52 120 127
+note 82 120 127
+note 73 120 127
+note 78 120 127
+note 82 120 127
+note 73 120 127
+note 78 120 127
+note 82 120 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 78 60 127
+note 82 240 127
+note 58 120 127
+note 64 120 127
+note 72 240 127
+note 53 60 127
+note 72 60 127
+note 77 60 127
+note 81 60 127
+rest 240
+rest 480
+note 60 60 127
+note 69 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+rest 480
+note 45 240 127
+rest 240
+rest 480
+note 69 60 127
+note 77 60 127
+note 65 60 127
+note 60 60 127
+rest 240
+note 76 240 127
+rest 240
+note 48 60 127
+note 77 60 127
+note 48 60 127
+note 77 60 127
+rest 240
+rest 480
+note 69 60 127
+note 77 60 127
+note 65 60 127
+note 60 60 127
+rest 240
+note 79 240 127
+rest 240
+note 53 60 127
+note 81 60 127
+note 53 60 127
+note 81 60 127
+rest 240
+note 82 240 127
+rest 240
+note 69 60 127
+note 84 60 127
+note 65 60 127
+note 60 60 127
+rest 240
+note 85 240 127
+rest 240
+note 46 60 127
+note 87 60 127
+note 82 60 127
+note 87 60 127
+note 46 480 127
+rest 240
+note 48 60 127
+note 65 60 127
+note 80 60 127
+note 85 60 127
+note 48 480 127
+rest 240
+note 49 60 127
+note 84 60 127
+note 79 60 127
+note 84 60 127
+rest 240
+rest 480
+note 50 60 127
+note 65 60 127
+note 75 60 127
+note 82 60 127
+rest 240
+rest 480
+note 51 120 127
+note 80 120 127
+note 73 120 127
+note 80 120 127
+note 51 120 127
+note 80 120 127
+note 73 120 127
+note 80 120 127
+note 70 60 127
+note 67 60 127
+note 80 60 127
+note 73 60 127
+note 61 120 127
+note 67 120 127
+note 70 120 127
+note 67 120 127
+note 61 120 127
+note 70 120 127
+note 55 120 127
+note 91 120 127
+note 75 120 127
+note 91 120 127
+note 55 120 127
+note 91 120 127
+note 75 120 127
+note 91 120 127
+note 61 60 127
+note 67 60 127
+note 70 60 127
+note 75 60 127
+note 91 120 127
+note 70 120 127
+note 67 120 127
+note 61 120 127
+note 91 120 127
+note 70 120 127
+note 56 60 127
+note 87 60 127
+note 72 60 127
+note 87 60 127
+rest 480
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 48 240 127
+rest 480
+rest 240
+note 72 60 127
+note 67 60 127
+note 63 60 127
+note 60 60 127
+rest 480
+rest 240
+note 51 240 127
+rest 480
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 44 240 127
+rest 480
+rest 240
+note 87 60 127
+note 67 60 127
+note 63 60 127
+note 60 60 127
+rest 480
+rest 240
+note 43 120 127
+note 86 120 127
+note 77 120 127
+note 86 120 127
+note 43 120 127
+note 86 120 127
+note 77 120 127
+note 86 120 127
+note 58 120 127
+note 69 120 127
+note 72 120 127
+note 77 120 127
+note 86 120 127
+note 77 120 127
+note 72 120 127
+note 69 120 127
+note 43 60 127
+note 58 60 127
+note 65 60 127
+note 69 60 127
+note 86 60 127
+note 72 60 127
+note 69 60 127
+note 65 60 127
+note 43 60 127
+note 58 60 127
+note 65 60 127
+note 72 60 127
+rest 240
+note 43 60 127
+note 65 60 127
+note 72 60 127
+note 82 60 127
+rest 480
+rest 240
+note 42 120 127
+note 85 120 127
+note 76 120 127
+note 85 120 127
+note 42 120 127
+note 85 120 127
+note 76 120 127
+note 85 120 127
+note 58 120 127
+note 64 120 127
+note 72 120 127
+note 76 120 127
+note 85 120 127
+note 76 120 127
+note 72 120 127
+note 64 120 127
+note 87 60 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 87 60 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 87 60 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 87 240 127
+note 42 60 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 76 120 127
+note 87 120 127
+note 76 120 127
+note 87 120 127
+note 76 240 127
+note 41 60 127
+note 84 60 127
+note 77 60 127
+note 84 60 127
+rest 240
+note 82 240 127
+rest 240
+note 81 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 79 240 127
+rest 240
+note 45 60 127
+note 77 60 127
+note 45 60 127
+note 77 60 127
+rest 480
+rest 240
+note 65 60 127
+note 69 60 127
+note 84 60 127
+note 93 60 127
+rest 240
+note 83 60 127
+note 93 60 127
+note 83 60 127
+note 93 60 127
+rest 240
+note 48 60 127
+note 93 60 127
+note 84 60 127
+note 93 60 127
+rest 480
+rest 240
+note 77 60 127
+note 60 60 127
+note 65 60 127
+note 74 60 127
+rest 240
+note 79 240 127
+rest 240
+note 57 60 127
+note 81 60 127
+note 57 60 127
+note 81 60 127
+rest 240
+note 82 240 127
+rest 240
+note 84 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 85 240 127
+rest 240
+note 46 60 127
+note 87 60 127
+note 84 60 127
+note 87 60 127
+rest 480
+rest 240
+note 61 60 127
+note 68 60 127
+note 82 60 127
+note 85 60 127
+note 70 480 127
+rest 240
+note 53 60 127
+note 84 60 127
+note 80 60 127
+note 84 60 127
+rest 480
+rest 240
+note 61 60 127
+note 68 60 127
+note 79 60 127
+note 82 60 127
+rest 480
+rest 240
+note 51 60 127
+note 80 60 127
+note 77 60 127
+note 80 60 127
+note 77 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 58 60 127
+note 61 60 127
+note 67 60 127
+note 77 60 127
+note 80 120 127
+note 67 120 127
+note 61 120 127
+note 58 120 127
+note 80 60 127
+note 67 60 127
+note 61 60 127
+note 58 60 127
+note 55 60 127
+note 58 60 127
+note 61 60 127
+note 79 60 127
+note 82 60 127
+note 79 60 127
+note 61 60 127
+note 58 60 127
+note 55 60 127
+note 58 60 127
+note 61 60 127
+note 79 60 127
+note 82 120 127
+note 79 120 127
+note 61 60 127
+note 65 60 127
+note 68 60 127
+note 79 60 127
+note 82 120 127
+note 68 120 127
+note 65 120 127
+note 61 120 127
+note 68 240 127
+note 56 60 127
+note 84 60 127
+note 75 60 127
+note 80 60 127
+note 84 480 127
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 48 240 127
+rest 480
+rest 240
+note 72 60 127
+note 67 60 127
+note 63 60 127
+note 60 60 127
+rest 480
+rest 240
+note 51 240 127
+rest 480
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 44 240 127
+rest 480
+rest 240
+note 63 60 127
+note 67 60 127
+note 80 60 127
+note 84 60 127
+rest 480
+rest 240
+note 43 60 127
+note 82 60 127
+note 79 60 127
+note 82 60 127
+note 79 120 127
+note 82 120 127
+note 79 120 127
+note 82 120 127
+note 79 120 127
+note 82 120 127
+note 58 60 127
+note 65 60 127
+note 69 60 127
+note 72 60 127
+note 79 120 127
+note 82 120 127
+note 79 480 127
+note 49 60 127
+note 84 60 127
+note 49 60 127
+note 84 60 127
+rest 480
+rest 240
+note 58 60 127
+note 69 60 127
+note 72 60 127
+note 85 60 127
+note 77 720 127
+note 48 60 127
+note 84 60 127
+note 76 60 127
+note 84 60 127
+note 48 60 127
+note 84 60 127
+note 76 60 127
+note 84 60 127
+note 48 60 127
+note 84 60 127
+note 76 60 127
+note 84 60 127
+note 76 120 127
+note 84 120 127
+note 50 60 127
+note 58 60 127
+note 64 60 127
+note 72 60 127
+note 84 120 127
+note 50 120 127
+note 84 120 127
+note 50 120 127
+rest 240
+note 51 120 127
+note 82 120 127
+note 72 120 127
+note 82 120 127
+note 51 60 127
+note 82 60 127
+note 72 60 127
+note 82 60 127
+note 72 120 127
+note 82 120 127
+note 52 60 127
+note 67 60 127
+note 72 60 127
+note 82 60 127
+note 52 120 127
+note 82 120 127
+note 52 480 127
+note 53 60 127
+note 81 60 127
+note 77 60 127
+note 81 60 127
+rest 480
+rest 240
+note 89 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 88 240 127
+rest 240
+note 57 60 127
+note 89 60 127
+note 57 60 127
+note 89 60 127
+rest 480
+rest 240
+note 77 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 76 240 127
+rest 240
+note 48 60 127
+note 77 60 127
+note 48 60 127
+note 77 60 127
+rest 480
+rest 240
+note 77 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 79 240 127
+rest 240
+note 53 60 127
+note 81 60 127
+note 53 60 127
+note 81 60 127
+rest 240
+note 82 240 127
+rest 240
+note 84 60 127
+note 60 60 127
+note 65 60 127
+note 69 60 127
+rest 240
+note 85 240 127
+rest 240
+note 58 60 127
+note 87 60 127
+note 84 60 127
+note 87 60 127
+rest 480
+rest 240
+note 61 60 127
+note 68 60 127
+note 82 60 127
+note 85 60 127
+rest 480
+rest 240
+note 52 60 127
+note 84 60 127
+note 80 60 127
+note 84 60 127
+rest 480
+rest 240
+note 65 60 127
+note 72 60 127
+note 79 60 127
+note 82 60 127
+rest 480
+rest 240
+note 51 60 127
+note 80 60 127
+note 77 60 127
+note 80 60 127
+note 77 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 77 120 127
+note 80 120 127
+note 61 60 127
+note 67 60 127
+note 72 60 127
+note 77 60 127
+note 80 120 127
+note 72 120 127
+note 80 120 127
+note 72 120 127
+note 80 240 127
+note 45 60 127
+note 82 60 127
+note 76 60 127
+note 82 60 127
+note 76 120 127
+note 82 120 127
+note 76 120 127
+note 82 120 127
+note 76 120 127
+note 82 120 127
+note 61 60 127
+note 67 60 127
+note 76 60 127
+note 82 60 127
+note 72 120 127
+note 82 120 127
+note 72 240 127
+rest 240
+note 44 60 127
+note 84 60 127
+note 75 60 127
+note 84 60 127
+rest 480
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 48 240 127
+rest 480
+rest 240
+note 72 60 127
+note 67 60 127
+note 63 60 127
+note 60 60 127
+rest 480
+rest 240
+note 56 240 127
+rest 480
+rest 240
+note 60 60 127
+note 63 60 127
+note 67 60 127
+note 72 60 127
+rest 480
+rest 240
+note 60 240 127
+rest 480
+rest 240
+note 60 60 127
+note 67 60 127
+note 75 60 127
+note 84 60 127
+rest 480
+rest 240
+note 55 60 127
+note 82 60 127
+note 77 60 127
+note 82 60 127
+note 77 120 127
+note 82 120 127
+note 77 120 127
+note 82 120 127
+note 77 120 127
+note 82 120 127
+note 58 60 127
+note 65 60 127
+note 69 60 127
+note 77 60 127
+note 82 720 127
+note 43 60 127
+note 82 60 127
+note 43 120 127
+note 82 240 127
+rest 480
+note 58 60 127
+note 69 60 127
+note 77 60 127
+note 89 60 127
+rest 480
+rest 240
+note 48 60 127
+note 58 60 127
+note 69 60 127
+note 88 60 127
+note 76 60 127
+note 69 60 127
+note 64 60 127
+note 58 60 127
+note 48 120 127
+note 58 120 127
+note 64 120 127
+note 69 120 127
+note 84 60 127
+note 69 60 127
+note 64 60 127
+note 58 60 127
+note 48 60 127
+note 58 60 127
+note 64 60 127
+note 69 60 127
+note 83 60 127
+note 69 60 127
+note 64 60 127
+note 58 60 127
+note 48 60 127
+note 58 60 127
+note 64 60 127
+note 69 60 127
+note 84 120 127
+note 72 120 127
+note 69 120 127
+note 64 120 127
+note 58 120 127
+note 48 120 127
+note 58 60 127
+note 64 60 127
+note 69 60 127
+note 72 60 127
+rest 960
