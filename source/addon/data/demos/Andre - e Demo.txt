@@ -1,0 +1,31 @@
+NVDA_COMPOSER_TXT v6
+tempo 120
+ppq 480
+step 480
+base 60
+transpose 0
+keyPc 0
+keyName C
+chromatic 0
+scale 0
+qwerty 0
+title e Demo
+notes
+When testing the Web composer at https://onj.me/nc I wrote this.
+endNotes
+events
+note 71 160 127
+note 71 160 127
+note 69 160 127
+note 69 160 127
+note 68 160 127
+note 68 160 127
+note 66 160 127
+note 66 160 127
+note 64 160 127
+rest 160
+note 87 160 127
+note 78 60 127
+note 83 60 127
+note 87 60 127
+note 88 160 127

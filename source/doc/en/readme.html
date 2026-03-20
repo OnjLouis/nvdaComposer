@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>NVDA Composer 1.6.0</title>
+  <title>NVDA Composer 1.6.1</title>
   <style>
     body { font-family: Arial, sans-serif; line-height: 1.5; margin: 2em; max-width: 70em; }
     h1, h2, h3 { line-height: 1.2; }
@@ -14,18 +14,19 @@
   </style>
 </head>
 <body>
-  <h1>NVDA Composer 1.6.0</h1>
+  <h1>NVDA Composer 1.6.1</h1>
 
-  <h2>What’s new in 1.6.0</h2>
+  <h2>What's new in 1.6.1</h2>
+  <ul>
+    <li>Added <strong>Ctrl+Shift+S</strong> to select all events and copy the full share clip in one step.</li>
+  </ul>
+
+  <h2>What's new in 1.6.0</h2>
   <ul>
     <li>Added <strong>F8</strong> to cycle the live playback engine while in the composer window.</li>
     <li>Playback modes now cycle through <strong>NVDA tones</strong>, <strong>smooth local audio</strong>, and <strong>Nokia-style local audio</strong>.</li>
-    <li>The selected playback engine is stored persistently in NVDA’s configuration, so your last choice is remembered.</li>
+    <li>The selected playback engine is stored persistently in NVDA's configuration, so your last choice is remembered.</li>
   </ul>
-
-  <div class="note">
-    <p><strong>Playback engine toggle:</strong> Press <code>F8</code> in the composer window to switch between the three live playback modes. The default remains <strong>NVDA tones</strong>.</p>
-  </div>
 
   <h2>Keyboard shortcuts</h2>
 
@@ -50,7 +51,7 @@
       <tr><td><code>Shift+Enter</code></td><td>Play up to the cursor.</td></tr>
       <tr><td><code>Ctrl+Space</code></td><td>Pause or resume playback.</td></tr>
       <tr><td><code>Esc</code></td><td>Stop playback.</td></tr>
-      <tr><td><code>F8</code></td><td>Cycle live playback engine: NVDA tones → smooth local audio → Nokia-style local audio.</td></tr>
+      <tr><td><code>F8</code></td><td>Cycle live playback engine: NVDA tones -&gt; smooth local audio -&gt; Nokia-style local audio.</td></tr>
       <tr><td><code>Ctrl+F</code></td><td>Toggle follow playback.</td></tr>
       <tr><td><code>Ctrl+Shift+F</code></td><td>Toggle snap on pause.</td></tr>
     </tbody>
@@ -125,6 +126,7 @@
       <tr><td><code>Ctrl+C</code></td><td>Copy selection.</td></tr>
       <tr><td><code>Ctrl+V</code></td><td>Paste.</td></tr>
       <tr><td><code>Ctrl+Shift+C</code></td><td>Copy share clip, including optional metadata comments.</td></tr>
+      <tr><td><code>Ctrl+Shift+S</code></td><td>Select all events and copy the full share clip.</td></tr>
       <tr><td><code>Ctrl+Shift+V</code></td><td>Paste and optionally import metadata.</td></tr>
     </tbody>
   </table>
@@ -139,7 +141,7 @@
       <tr><td><code>Ctrl+O</code></td><td>Open or import a project or supported file.</td></tr>
       <tr><td><code>Ctrl+Shift+O</code></td><td>Open or import, starting in the demos folder.</td></tr>
       <tr><td><code>Ctrl+S</code></td><td>Save.</td></tr>
-      <tr><td><code>Ctrl+Shift+S</code> or <code>F12</code></td><td>Save As.</td></tr>
+      <tr><td><code>F12</code></td><td>Save As.</td></tr>
       <tr><td><code>Ctrl+E</code></td><td>Export.</td></tr>
       <tr><td><code>Ctrl+P</code></td><td>Set tempo from prompt.</td></tr>
       <tr><td><code>F1</code></td><td>Open the full documentation.</td></tr>

@@ -4179,6 +4179,13 @@ class ComposerDialog(wx.Dialog):
         else:
             ui.message("Copy failed")
 
+    def _copy_share_all(self) -> None:
+        if not self.comp.events:
+            ui.message("Nothing to copy")
+            return
+        self._select_all_events()
+        self._copy_share_selection()
+
     def _paste_clipboard(self) -> None:
         self._push_undo()
         text = self._get_clipboard_text()
@@ -4846,9 +4853,9 @@ Esc closes this quick start tutorial window.'''
         if (mods & wx.MOD_CONTROL) and not (mods & (wx.MOD_ALT | wx.MOD_SHIFT)) and key in (ord("S"), ord("s")):
             self._do_save()
             return
-        # Ctrl+Shift+S = Save As
+        # Ctrl+Shift+S = Select all + copy share clip
         if (mods & wx.MOD_CONTROL) and (mods & wx.MOD_SHIFT) and not (mods & wx.MOD_ALT) and key in (ord("S"), ord("s")):
-            self._do_save_as()
+            self._copy_share_all()
             return
 
 
