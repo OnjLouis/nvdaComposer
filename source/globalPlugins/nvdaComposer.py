@@ -18,6 +18,10 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, Dict, Any
 
 from scriptHandler import script
+try:
+    from ._onjGithubUpdater import GitHubReleaseUpdater
+except Exception:
+    GitHubReleaseUpdater = None
 
 try:
     import config
@@ -5242,6 +5246,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self._dlg: Optional[ComposerDialog] = None
         self._addon_dir = os.path.dirname(__file__)
         self._addon_root = os.path.dirname(self._addon_dir)
+        self._updater = None
+        if GitHubReleaseUpdater:
+            self._updater = GitHubReleaseUpdater("nvdaComposer", "NVDA Composer", "OnjLouis", "nvdaComposer")
+            self._updater.start()
+
+    def terminate(self):
+        if self._updater:
+            self._updater.stop()
+        return super().terminate()
 
     @script(description="Open NVDA Composer", gesture="kb:NVDA+alt+n")
     def script_openComposer(self, gesture):
@@ -5255,3 +5268,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             self._dlg.Show()
         except Exception as e:
             ui.message(f"Failed to open Composer: {e}")
+
+    @script(description="Check for NVDA Composer updates")
+    def script_checkForNvdaComposerUpdate(self, gesture):
+        if self._updater:
+            wx.CallAfter(self._updater.checkNow, True)
+        else:
+            ui.message("Updater is not available")

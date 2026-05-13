@@ -2,6 +2,8 @@
 
 NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad for NVDA.
 
+Non-NVDA users can try the web version at <https://onj.me/nc>.
+
 ## Quick Start
 
 1. Open Composer with `NVDA+Alt+N`.
