@@ -6,11 +6,12 @@ Non-NVDA users can try the web version at <https://onj.me/nc>.
 
 ## Quick Start
 
-1. Open Composer with `NVDA+Alt+N`.
-2. Choose a step length with `1` to `6`.
-3. Enter notes, use `Space` for a rest.
-4. Press `Enter` to play/pause.
-5. Save with `Ctrl+S`.
+1. Install NVDA Composer from the [NVDA Add-on Store](https://addonstore.nvaccess.org/?addonId=nvdaComposer&apiVersion=2026.1.0&channel=stable&language=en).
+2. Open Composer with `NVDA+Alt+N`.
+3. Choose a step length with `1` to `6`.
+4. Enter notes, use `Space` for a rest.
+5. Press `Enter` to play/pause.
+6. Save with `Ctrl+S`.
 
 ## Common Shortcuts
 

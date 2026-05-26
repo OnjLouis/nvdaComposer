@@ -18,10 +18,6 @@ from dataclasses import dataclass
 from typing import List, Optional, Tuple, Dict, Any
 
 from scriptHandler import script
-try:
-    from ._onjGithubUpdater import GitHubReleaseUpdater
-except Exception:
-    GitHubReleaseUpdater = None
 
 try:
     import config
@@ -5246,14 +5242,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self._dlg: Optional[ComposerDialog] = None
         self._addon_dir = os.path.dirname(__file__)
         self._addon_root = os.path.dirname(self._addon_dir)
-        self._updater = None
-        if GitHubReleaseUpdater:
-            self._updater = GitHubReleaseUpdater("nvdaComposer", "NVDA Composer", "OnjLouis", "nvdaComposer")
-            self._updater.start()
 
     def terminate(self):
-        if self._updater:
-            self._updater.stop()
         return super().terminate()
 
     @script(description="Open NVDA Composer", gesture="kb:NVDA+alt+n")
