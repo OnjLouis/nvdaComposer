@@ -5258,10 +5258,3 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             self._dlg.Show()
         except Exception as e:
             ui.message(f"Failed to open Composer: {e}")
-
-    @script(description="Check for NVDA Composer updates")
-    def script_checkForNvdaComposerUpdate(self, gesture):
-        if self._updater:
-            wx.CallAfter(self._updater.checkNow, True)
-        else:
-            ui.message("Updater is not available")

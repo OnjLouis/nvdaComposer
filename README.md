@@ -4,6 +4,10 @@ NVDA Composer is a keyboard-first, screen-reader-friendly music sketchpad for NV
 
 Non-NVDA users can try the web version at <https://onj.me/nc>.
 
+## Changes
+
+- 1.6.4: Removes the old GitHub updater hotkey now that NVDA Composer is distributed through the NVDA Add-on Store.
+
 ## Quick Start
 
 1. Install NVDA Composer from the [NVDA Add-on Store](https://addonstore.nvaccess.org/?addonId=nvdaComposer&apiVersion=2026.1.0&channel=stable&language=en).
